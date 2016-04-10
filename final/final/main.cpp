@@ -431,6 +431,9 @@ namespace
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+		glEnable(GL_COLOR_MATERIAL);
+
 		// Render a color-cube consisting of 6 quads with different colors
 		glLoadIdentity();                 // Reset the model-view matrix
 		glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
