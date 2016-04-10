@@ -9,9 +9,13 @@
 #include <vector>
 
 
-#include <GL/freeglut.h>
-
+#ifdef __APPLE__
+#include "vecmath.h"
+#include <GLUT/glut.h>
+#else
 #include <vecmath.h>
+#include <GL/freeglut.h>
+#endif
 
 //#include "parse.h"
 //#include "curve.h"

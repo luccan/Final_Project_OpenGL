@@ -5,8 +5,11 @@
 // -*-c++-*-
 #ifndef CAMERA_H
 #define CAMERA_H
-
+#ifdef __APPLE__
+#include "vecmath.h"
+#else
 #include <vecmath.h>
+#endif
 
 class Camera
 {

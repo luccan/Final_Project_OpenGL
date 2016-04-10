@@ -1,6 +1,14 @@
 #include "camera.h"
 #include "extra.h"
-#include <GL/glu.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#include "vecmath.h"
+#else
+#include <GL/gl.h>
+#include <vecmath.h>
+#endif
 #include <iostream>
 using namespace std;
 
@@ -225,7 +233,7 @@ void Camera::ApplyModelview() const
               0.0, 1.0, 0.0);
 
     // rotate object
-    glMultMatrixf(mCurrentRot);
+//    glMultMatrixf(mCurrentRot);
 
     //translate object to center
     glTranslatef(-mCurrentCenter[0],-mCurrentCenter[1],-mCurrentCenter[2]);    

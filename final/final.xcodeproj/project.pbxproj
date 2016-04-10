@@ -21,10 +21,7 @@
 		ACB9B6D51CB4492C00E7E35D /* Perlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C31CB4492C00E7E35D /* Perlin.cpp */; };
 		ACB9B6D61CB4492C00E7E35D /* GridSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C51CB4492C00E7E35D /* GridSystem.cpp */; };
 		ACB9B6D71CB4492C00E7E35D /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C71CB4492C00E7E35D /* Grid.cpp */; };
-		ACB9B6D91CB4492C00E7E35D /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6CA1CB4492C00E7E35D /* curve.cpp */; };
 		ACB9B6DA1CB4492C00E7E35D /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6CB1CB4492C00E7E35D /* camera.cpp */; };
-		ACB9B6DB1CB4492C00E7E35D /* surf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6CE1CB4492C00E7E35D /* surf.cpp */; };
-		ACB9B6DC1CB4492C00E7E35D /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6D01CB4492C00E7E35D /* parse.cpp */; };
 		ACB9B6DE1CB449D200E7E35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6DD1CB449D200E7E35D /* main.cpp */; };
 		ACB9B6EE1CB44C3600E7E35D /* freeglut.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB9B6ED1CB44C3600E7E35D /* freeglut.lib */; };
 		ACB9B6F51CB44C5500E7E35D /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6F41CB44C5500E7E35D /* Makefile */; };
@@ -71,14 +68,7 @@
 		ACB9B6C61CB4492C00E7E35D /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
 		ACB9B6C71CB4492C00E7E35D /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
 		ACB9B6C91CB4492C00E7E35D /* extra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extra.h; sourceTree = "<group>"; };
-		ACB9B6CA1CB4492C00E7E35D /* curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curve.cpp; sourceTree = "<group>"; };
 		ACB9B6CB1CB4492C00E7E35D /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
-		ACB9B6CC1CB4492C00E7E35D /* tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tuple.h; sourceTree = "<group>"; };
-		ACB9B6CD1CB4492C00E7E35D /* surf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = surf.h; sourceTree = "<group>"; };
-		ACB9B6CE1CB4492C00E7E35D /* surf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = surf.cpp; sourceTree = "<group>"; };
-		ACB9B6CF1CB4492C00E7E35D /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parse.h; sourceTree = "<group>"; };
-		ACB9B6D01CB4492C00E7E35D /* parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parse.cpp; sourceTree = "<group>"; };
-		ACB9B6D11CB4492C00E7E35D /* curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curve.h; sourceTree = "<group>"; };
 		ACB9B6D21CB4492C00E7E35D /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		ACB9B6DD1CB449D200E7E35D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ACB9B6E01CB44A4D00E7E35D /* circles.swp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = circles.swp; sourceTree = "<group>"; };
@@ -149,16 +139,9 @@
 				ACB9B6DF1CB44A4D00E7E35D /* swp */,
 				ACB9B6C71CB4492C00E7E35D /* Grid.cpp */,
 				ACB9B6C91CB4492C00E7E35D /* extra.h */,
-				ACB9B6CA1CB4492C00E7E35D /* curve.cpp */,
 				ACB9B6EF1CB44C5500E7E35D /* freeglut.dll */,
 				ACB9B6F01CB44C5500E7E35D /* GL */,
 				ACB9B6CB1CB4492C00E7E35D /* camera.cpp */,
-				ACB9B6CC1CB4492C00E7E35D /* tuple.h */,
-				ACB9B6CD1CB4492C00E7E35D /* surf.h */,
-				ACB9B6CE1CB4492C00E7E35D /* surf.cpp */,
-				ACB9B6CF1CB4492C00E7E35D /* parse.h */,
-				ACB9B6D01CB4492C00E7E35D /* parse.cpp */,
-				ACB9B6D11CB4492C00E7E35D /* curve.h */,
 				ACB9B6D21CB4492C00E7E35D /* camera.h */,
 				ACB9B68A1CB4479500E7E35D /* vecmath */,
 			);
@@ -288,16 +271,13 @@
 				ACB9B6D31CB4492C00E7E35D /* Terrain.cpp in Sources */,
 				ACB9B6A01CB4479500E7E35D /* Vector4f.cpp in Sources */,
 				ACB9B6DA1CB4492C00E7E35D /* camera.cpp in Sources */,
-				ACB9B6DC1CB4492C00E7E35D /* parse.cpp in Sources */,
 				ACB9B69E1CB4479500E7E35D /* Vector2f.cpp in Sources */,
-				ACB9B6D91CB4492C00E7E35D /* curve.cpp in Sources */,
 				ACB9B69D1CB4479500E7E35D /* Quat4f.cpp in Sources */,
 				ACB9B6D61CB4492C00E7E35D /* GridSystem.cpp in Sources */,
 				ACB9B69A1CB4479500E7E35D /* Matrix2f.cpp in Sources */,
 				ACB9B6D71CB4492C00E7E35D /* Grid.cpp in Sources */,
 				ACB9B6D51CB4492C00E7E35D /* Perlin.cpp in Sources */,
 				ACB9B69F1CB4479500E7E35D /* Vector3f.cpp in Sources */,
-				ACB9B6DB1CB4492C00E7E35D /* surf.cpp in Sources */,
 				ACB9B6D41CB4492C00E7E35D /* PerlinNoise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,6 +407,7 @@
 				ACB9B6851CB4474500E7E35D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

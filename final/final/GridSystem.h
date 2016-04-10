@@ -1,8 +1,11 @@
 #ifndef GRIDSYSTEM_H
 #define GRIDSYSTEM_H
 
-
-#include <vecmath.h>
+#ifdef __APPLE__
+    #include "vecmath.h"
+#else
+    #include <vecmath.h>
+#endif
 #include <vector>
 #include "Grid.h"
 
