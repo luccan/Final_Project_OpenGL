@@ -16,14 +16,12 @@ GridSystem::GridSystem(int w, int h, Perlin p)
 {
 	this->p = p;
 	//initialize grids
-	for (int i = 0; i < w; i++){
+	for (float i = 0.5f; i < w; i+=1.1f){
 		vector<Grid> gridRow;
-		for (int j = 0; j < h; j++){
-			Grid g = Grid(i, j);
-			float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-			g.assignNoise(r);
-			//g.assignNoise(p.noise(i, 0.0f, j));
-			gridRow.push_back(g);//grids[i][j] = g;
+		for (float j = 0.5f; j < h; j+=1.1f){
+			Grid g = Grid(i,0.0f, j);
+			g.assignNoise(p.octave_noise(i, 0.0f, j, 1, 1, 3));
+			gridRow.push_back(g);
 		}
 		grids.push_back(gridRow);
 	}
@@ -43,7 +41,6 @@ void GridSystem::drawMesh()
 				glVertex(grids[i][j-1].getXYZ());
 				glVertex(grids[i][j].getXYZ());
 				glVertex(grids[i-1][j].getXYZ());
-				//cout << "quad" <<i<<j<< endl;
 			}
 		}
 	}

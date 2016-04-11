@@ -6,10 +6,9 @@ Grid::Grid()
 {
 }
 
-Grid::Grid(float x, float z)
+Grid::Grid(float x, float y, float z)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
-	cout << x << " " << 0.0f << " " << z << endl;
 }
 
 void Grid::assignNoise(float val)

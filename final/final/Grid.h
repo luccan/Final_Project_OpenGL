@@ -10,7 +10,7 @@ class Grid
 {
 public:
 	Grid();
-	Grid(float x, float z);
+	Grid(float x, float y, float z);
 	void assignNoise(float val);
 	float getNoiseVal();
 	Vector3f getXYZ();
