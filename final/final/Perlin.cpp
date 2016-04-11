@@ -4,7 +4,6 @@
 #include <ctime>
 #include <iostream>
 #include <cmath>
-#include "stdafx.h"
 
 Perlin::Perlin()
 {

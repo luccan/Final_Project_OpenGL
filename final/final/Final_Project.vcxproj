@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -81,7 +81,6 @@
     <ClCompile Include="GridSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Perlin.cpp" />
-    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="vecmath\src\Matrix2f.cpp" />
     <ClCompile Include="vecmath\src\Matrix3f.cpp" />
@@ -97,7 +96,6 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GridSystem.h" />
     <ClInclude Include="Perlin.h" />
-    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="vecmath\include\Matrix2f.h" />
     <ClInclude Include="vecmath\include\Matrix3f.h" />
     <ClInclude Include="vecmath\include\Matrix4f.h" />
