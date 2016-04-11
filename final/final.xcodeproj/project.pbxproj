@@ -17,7 +17,6 @@
 		ACB9B69F1CB4479500E7E35D /* Vector3f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6961CB4479500E7E35D /* Vector3f.cpp */; };
 		ACB9B6A01CB4479500E7E35D /* Vector4f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6981CB4479500E7E35D /* Vector4f.cpp */; };
 		ACB9B6D31CB4492C00E7E35D /* Terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6BF1CB4492C00E7E35D /* Terrain.cpp */; };
-		ACB9B6D41CB4492C00E7E35D /* PerlinNoise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C11CB4492C00E7E35D /* PerlinNoise.cpp */; };
 		ACB9B6D51CB4492C00E7E35D /* Perlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C31CB4492C00E7E35D /* Perlin.cpp */; };
 		ACB9B6D61CB4492C00E7E35D /* GridSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C51CB4492C00E7E35D /* GridSystem.cpp */; };
 		ACB9B6D71CB4492C00E7E35D /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B6C71CB4492C00E7E35D /* Grid.cpp */; };
@@ -59,8 +58,6 @@
 		ACB9B6981CB4479500E7E35D /* Vector4f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector4f.cpp; sourceTree = "<group>"; };
 		ACB9B6991CB4479500E7E35D /* Vector4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector4f.h; sourceTree = "<group>"; };
 		ACB9B6BF1CB4492C00E7E35D /* Terrain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terrain.cpp; sourceTree = "<group>"; };
-		ACB9B6C01CB4492C00E7E35D /* PerlinNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerlinNoise.h; sourceTree = "<group>"; };
-		ACB9B6C11CB4492C00E7E35D /* PerlinNoise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerlinNoise.cpp; sourceTree = "<group>"; };
 		ACB9B6C21CB4492C00E7E35D /* Perlin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Perlin.h; sourceTree = "<group>"; };
 		ACB9B6C31CB4492C00E7E35D /* Perlin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Perlin.cpp; sourceTree = "<group>"; };
 		ACB9B6C41CB4492C00E7E35D /* GridSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSystem.h; sourceTree = "<group>"; };
@@ -128,8 +125,6 @@
 			children = (
 				ACB9B6EC1CB44C3600E7E35D /* lib */,
 				ACB9B6BF1CB4492C00E7E35D /* Terrain.cpp */,
-				ACB9B6C01CB4492C00E7E35D /* PerlinNoise.h */,
-				ACB9B6C11CB4492C00E7E35D /* PerlinNoise.cpp */,
 				ACB9B6C21CB4492C00E7E35D /* Perlin.h */,
 				ACB9B6C31CB4492C00E7E35D /* Perlin.cpp */,
 				ACB9B6C41CB4492C00E7E35D /* GridSystem.h */,
@@ -278,7 +273,6 @@
 				ACB9B6D71CB4492C00E7E35D /* Grid.cpp in Sources */,
 				ACB9B6D51CB4492C00E7E35D /* Perlin.cpp in Sources */,
 				ACB9B69F1CB4479500E7E35D /* Vector3f.cpp in Sources */,
-				ACB9B6D41CB4492C00E7E35D /* PerlinNoise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

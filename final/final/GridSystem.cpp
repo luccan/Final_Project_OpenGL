@@ -1,5 +1,9 @@
 #include "GridSystem.h"
+#ifdef __APPLE__
+#include "Vector3f.h"
+#else
 #include <Vector3f.h>
+#endif
 #include "extra.h"
 #include <iostream>
 
