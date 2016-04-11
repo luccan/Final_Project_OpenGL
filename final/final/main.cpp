@@ -22,6 +22,7 @@
 //#include "surf.h"
 #include "extra.h"
 #include "camera.h"
+#include "Terrain.h"
 
 using namespace std;
 
@@ -62,6 +63,8 @@ namespace
 	vector<string> gCurveNames;
 	//vector<Surface> gSurfaces;
 	vector<string> gSurfaceNames;
+
+	Terrain terrain;
 
 	// Declarations of functions whose implementations occur later.
 	void arcballRotation(int endX, int endY);
@@ -427,6 +430,38 @@ namespace
 
 	}
 
+	void displayTerrain(){
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+		glEnable(GL_COLOR_MATERIAL);
+
+		glLoadIdentity();                 // Reset the model-view matrix
+
+		// Light color (RGBA)
+		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
+		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
+
+		camera.ApplyModelview();
+
+		terrain.getGridSystem().drawMesh();
+
+		// This draws the coordinate axes when you're rotating, to
+		// keep yourself oriented.
+		if (gMousePressed)
+		{
+			glPushMatrix();
+			glTranslated(camera.GetCenter()[0], camera.GetCenter()[1], camera.GetCenter()[2]);
+			glCallList(gAxisList);
+			glPopMatrix();
+		}
+
+		glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+	}
+
 	void displayCube() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
@@ -582,9 +617,11 @@ int main(int argc, char* argv[])
 	// Set up the callback function for resizing windows
 	glutReshapeFunc(reshapeFunc);
 
+	Perlin perlin = Perlin();
+	terrain = Terrain(perlin, 10, 10);
 	// Call this whenever window needs redrawing
 	//glutDisplayFunc(drawScene);
-	glutDisplayFunc(displayCube);
+	glutDisplayFunc(displayTerrain);
 
 	// Trigger timerFunc every 20 msec
 	//  glutTimerFunc(20, timerFunc, 0);

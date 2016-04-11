@@ -9,9 +9,9 @@ class Terrain
 public:
 	Terrain();
 	Terrain(Perlin &p, int w, int h);
-	Perlin getPerlin();
+	GridSystem getGridSystem();
+	void SetGridSystem(GridSystem &gs);
 private:
-	Perlin p;
 	int w, h;
 	GridSystem gs;
 };

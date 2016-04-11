@@ -2,6 +2,7 @@
 #define GRID_H
 
 #include <vector>
+#include "Vector3f.h"
 
 using namespace std;
 
@@ -9,13 +10,12 @@ class Grid
 {
 public:
 	Grid();
-	Grid(float x, float y, float z);
+	Grid(float x, float z);
 	void assignNoise(float val);
 	float getNoiseVal();
+	Vector3f getXYZ();
 private:
-	float x;
-	float y;
-	float z;
+	Vector3f xyz;
 	float noiseval;
 };
 #endif // !GRID_H

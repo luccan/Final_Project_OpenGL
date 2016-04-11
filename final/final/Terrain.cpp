@@ -1,28 +1,22 @@
 #include "Terrain.h"
-#include "Perlin.h"
-
-Terrain::Terrain(Perlin& p, int w, int h)
-{
-	this->p = p;
-	this->w = w;
-	this->h = h;
-	this->gs = GridSystem();
-}
-
-Perlin Terrain::getPerlin()
-{
-	return this->p;
-}
+#include "GridSystem.h"
 
 Terrain::Terrain()
 {
 }
 
-//GridSystem Terrain::getGridSystem()
-//{
-//	return this->gs;
-//}
-//void Terrain::setGridSystem(GridSystem &gs)
-//{
-//	this->gs = gs;
-//}
+Terrain::Terrain(Perlin& p, int w, int h)
+{
+	this->w = w;
+	this->h = h;
+	this->gs = GridSystem(w,h,p);
+}
+
+GridSystem Terrain::getGridSystem()
+{
+	return this->gs;
+}
+void Terrain::SetGridSystem(GridSystem &gs)
+{
+	this->gs = gs;
+}

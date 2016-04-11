@@ -96,6 +96,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GridSystem.h" />
     <ClInclude Include="Perlin.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="vecmath\include\Matrix2f.h" />
     <ClInclude Include="vecmath\include\Matrix3f.h" />
     <ClInclude Include="vecmath\include\Matrix4f.h" />

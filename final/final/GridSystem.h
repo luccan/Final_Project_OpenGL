@@ -8,6 +8,7 @@
 #endif
 #include <vector>
 #include "Grid.h"
+#include "Perlin.h"
 
 using namespace std;
 
@@ -15,9 +16,11 @@ class GridSystem
 {
 public:
 	GridSystem();
-	void addGrid(Grid g);
+	GridSystem(int w, int h, Perlin p);
+	void drawMesh();
 private:
-	vector<Grid> list_grid;
+	vector<vector<Grid>> grids; //grids[x][y]
+	Perlin p;
 };
 #endif // !GRIDSYSTEM_H
 
