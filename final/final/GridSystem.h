@@ -21,6 +21,8 @@ public:
 private:
 	vector<vector<Grid>> grids; //grids[x][y]
 	Perlin p;
+	int w;
+	int h;
 };
 #endif // !GRIDSYSTEM_H
 
