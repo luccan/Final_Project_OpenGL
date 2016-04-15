@@ -35,7 +35,7 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	Camera camera;
+	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
 
 	// These are state variables for the UI
 	bool gMousePressed = false;
@@ -139,6 +139,7 @@ namespace
 			{
 			case GLUT_LEFT_BUTTON:
 				camera.MouseClick(Camera::LEFT, x, y);
+				
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);
@@ -469,6 +470,8 @@ namespace
 		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glEnable(GL_COLOR_MATERIAL);
 
+		glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
 		// Render a color-cube consisting of 6 quads with different colors
 		glLoadIdentity();                 // Reset the model-view matrix
 		glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
@@ -579,7 +582,6 @@ namespace
 	}
 
 }
-
 // Main routine.
 // Set up OpenGL, define the callbacks and start the main loop
 int main(int argc, char* argv[])
@@ -617,7 +619,7 @@ int main(int argc, char* argv[])
 	// Set up the callback function for resizing windows
 	glutReshapeFunc(reshapeFunc);
 
-	Perlin perlin = Perlin();
+	PerlinNoise perlin = PerlinNoise();
 	terrain = Terrain(perlin, 10, 10);
 	// Call this whenever window needs redrawing
 	//glutDisplayFunc(drawScene);
