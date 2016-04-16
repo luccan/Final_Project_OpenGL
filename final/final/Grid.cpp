@@ -21,7 +21,7 @@ void Grid::assignNoise(float val)
 {
 	this->noiseval = val;
 	this->xyz.y() = val;
-	if (val > 1.5f){
+	if (val > 1.9f){
 		this->texture = Texture(Texture::MOUNTAIN);
 	}
 	else {

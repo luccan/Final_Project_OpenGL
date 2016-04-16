@@ -8,8 +8,9 @@
 #include <cmath>
 #include <cstdio>
 #include <Vector3f.h>
+#include "Perlin.h"
 
-class PerlinNoise
+class PerlinNoise: public Perlin
 {
 public:
 

@@ -81,6 +81,8 @@
     <ClCompile Include="GridSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Perlin.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="vecmath\src\Matrix2f.cpp" />
@@ -97,6 +99,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GridSystem.h" />
     <ClInclude Include="Perlin.h" />
+    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="vecmath\include\Matrix2f.h" />

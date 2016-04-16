@@ -23,6 +23,7 @@
 #include "extra.h"
 #include "camera.h"
 #include "Terrain.h"
+#include "PerlinNoise.h"
 
 using namespace std;
 
@@ -35,7 +36,8 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
+	//PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
+	Camera camera;
 
 	// These are state variables for the UI
 	bool gMousePressed = false;
@@ -194,7 +196,7 @@ namespace
 
 		// Light color (RGBA)
 		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
+		GLfloat Lt0pos[] = { 3.0, 3.0, 4.0, 1.0 };
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
 		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
 
@@ -230,8 +232,8 @@ namespace
 	void initRendering()
 	{
 		glEnable(GL_DEPTH_TEST);   // Depth testing must be turned on
-		glEnable(GL_LIGHTING);     // Enable lighting calculations
-		glEnable(GL_LIGHT0);       // Turn on light #0.
+		//glEnable(GL_LIGHTING);     // Enable lighting calculations
+		//glEnable(GL_LIGHT0);       // Turn on light #0.
 
 		// Setup polygon drawing
 		glShadeModel(GL_SMOOTH);
@@ -385,9 +387,9 @@ namespace
 			glPushMatrix();
 			glScaled(5.0, 5.0, 5.0);
 			glBegin(GL_LINES);
-			glColor4f(1, 0.5, 0.5, 1); glVertex3d(0, 0, 0); glVertex3d(1, 0, 0);
-			glColor4f(0.5, 1, 0.5, 1); glVertex3d(0, 0, 0); glVertex3d(0, 1, 0);
-			glColor4f(0.5, 0.5, 1, 1); glVertex3d(0, 0, 0); glVertex3d(0, 0, 1);
+			glColor4f(1, 0.5, 0.5, 1); glVertex3d(0, 0, 0); glVertex3d(1, 0, 0); //x is red
+			glColor4f(0.5, 1, 0.5, 1); glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); //y is green
+			glColor4f(0.5, 0.5, 1, 1); glVertex3d(0, 0, 0); glVertex3d(0, 0, 1); //z is blue
 
 			glColor4f(0.5, 0.5, 0.5, 1);
 			glVertex3d(0, 0, 0); glVertex3d(-1, 0, 0);
@@ -439,12 +441,6 @@ namespace
 		glEnable(GL_COLOR_MATERIAL);
 
 		glLoadIdentity();                 // Reset the model-view matrix
-
-		// Light color (RGBA)
-		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
-		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
 
 		camera.ApplyModelview();
 

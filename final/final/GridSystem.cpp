@@ -16,27 +16,28 @@ GridSystem::GridSystem(int w, int h, Perlin p)
 {
 	this->w = w;
 	this->h = h;
-	float offset = 0.5f;
+	float offset = 0.1f;
 	this->p = p;
 	float persistance = 0.2f;
 	float amplitude = 1.0f;
 	float octave = 7.0f;
 
 	//initialize grids
-	for (float i = 0.0f; i < w; i += offset)
+	for (float i = 0.0f; i < w + (offset/2); i += offset) //float correction that's why we add (offset/2)
 	{
 		vector<Grid> gridRow;
-		for (float j = offset; j < h; j += offset)
+		for (float j = 0.0; j < h + (offset/2); j += offset)
 		{
 			Grid g = Grid(i, 0.0f, j);
-			if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
+			g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
+			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave));
 			}
 			else
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
-			}
+			}*/
 			gridRow.push_back(g);
 		}
 		grids.push_back(gridRow);
@@ -73,28 +74,32 @@ void GridSystem::drawMesh()
 	glVertex(Vector3f(w, boundingBoxHeight, 0));
 	glVertex(Vector3f(w, 0, 0));
 
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glVertex(Vector3f(0, 0, h));
 	glVertex(Vector3f(0, boundingBoxHeight, h));
 	glVertex(Vector3f(w, boundingBoxHeight, h));
 	glVertex(Vector3f(w, 0, h));
 
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glVertex(Vector3f(w, 0, 0));
 	glVertex(Vector3f(w, boundingBoxHeight, 0));
 	glVertex(Vector3f(w, boundingBoxHeight, h));
 	glVertex(Vector3f(w, 0, h));
 
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glVertex(Vector3f(0, 0, 0));
 	glVertex(Vector3f(0, boundingBoxHeight, 0));
 	glVertex(Vector3f(0, boundingBoxHeight, h));
 	glVertex(Vector3f(0, 0, h));
 
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glVertex(Vector3f(0, 0, 0));
 	glVertex(Vector3f(0, 0, h));
 	glVertex(Vector3f(w, 0, h));
 	glVertex(Vector3f(w, 0, 0));
 
 	//draw water
-	glColor3f(0.0f, 0.0f, 7.0f);
+	glColor3f(0.0f, 0.0f, 0.7f);
 	glVertex(Vector3f(0, waterLevel, 0));
 	glVertex(Vector3f(0, waterLevel, h));
 	glVertex(Vector3f(w, waterLevel, h));
