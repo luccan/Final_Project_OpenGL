@@ -67,6 +67,7 @@ namespace
 	vector<string> gSurfaceNames;
 
 	Terrain terrain;
+	char terrainMode = 0; //0 for mesh, 1 for wireframe
 
 	// Declarations of functions whose implementations occur later.
 	void arcballRotation(int endX, int endY);
@@ -107,6 +108,10 @@ namespace
 		case 'p':
 		case 'P':
 			gPointMode = (gPointMode + 1) % 2;
+			break;
+		case 't':
+		case 'T':
+			terrainMode = (terrainMode + 1) % 2;
 			break;
 		default:
 			cout << "Unhandled key press " << key << "." << endl;
@@ -444,7 +449,13 @@ namespace
 
 		camera.ApplyModelview();
 
-		terrain.getGridSystem().drawMesh();
+		if (terrainMode == 0){
+			terrain.getGridSystem().drawMesh();
+		}
+		else {
+			terrain.getGridSystem().drawMeshSkeleton();
+		}
+		
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.

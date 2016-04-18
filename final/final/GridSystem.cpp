@@ -108,6 +108,29 @@ void GridSystem::drawMesh()
 	glEnd();
 }
 
+void GridSystem::drawMeshSkeleton(){
+	glBegin(GL_LINES);
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			if (i > 0){
+				grids[i][j].getTexture().chooseTexture();
+				glVertex(grids[i][j].getXYZ());
+				grids[i - 1][j].getTexture().chooseTexture();
+				glVertex(grids[i - 1][j].getXYZ());
+			}
+			if (j > 0){
+				grids[i][j].getTexture().chooseTexture();
+				glVertex(grids[i][j].getXYZ());
+				grids[i][j - 1].getTexture().chooseTexture();
+				glVertex(grids[i][j - 1].getXYZ());
+			}
+		}
+	}
+	glEnd();
+}
+
 
 
 
