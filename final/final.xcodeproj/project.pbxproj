@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC84E5561CC52F8100500E2B /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC84E54C1CC52F8100500E2B /* Texture.cpp */; };
+		AC84E5571CC52F8100500E2B /* PerspectiveCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC84E54E1CC52F8100500E2B /* PerspectiveCamera.cpp */; };
+		AC84E5581CC52F8100500E2B /* PerlinNoise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC84E5511CC52F8100500E2B /* PerlinNoise.cpp */; };
 		ACB9B6871CB4475600E7E35D /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB9B6861CB4475600E7E35D /* GLUT.framework */; };
 		ACB9B6891CB4475C00E7E35D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB9B6881CB4475C00E7E35D /* OpenGL.framework */; };
 		ACB9B69A1CB4479500E7E35D /* Matrix2f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB9B68B1CB4479500E7E35D /* Matrix2f.cpp */; };
@@ -39,6 +42,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AC84E54B1CC52F8100500E2B /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Texture.h; path = final/Texture.h; sourceTree = "<group>"; };
+		AC84E54C1CC52F8100500E2B /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Texture.cpp; path = final/Texture.cpp; sourceTree = "<group>"; };
+		AC84E54D1CC52F8100500E2B /* Terrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Terrain.h; path = final/Terrain.h; sourceTree = "<group>"; };
+		AC84E54E1CC52F8100500E2B /* PerspectiveCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PerspectiveCamera.cpp; path = final/PerspectiveCamera.cpp; sourceTree = "<group>"; };
+		AC84E54F1CC52F8100500E2B /* PerlinNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PerlinNoise.h; path = final/PerlinNoise.h; sourceTree = "<group>"; };
+		AC84E5501CC52F8100500E2B /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ray.h; path = final/Ray.h; sourceTree = "<group>"; };
+		AC84E5511CC52F8100500E2B /* PerlinNoise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PerlinNoise.cpp; path = final/PerlinNoise.cpp; sourceTree = "<group>"; };
+		AC84E5521CC52F8100500E2B /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = final/Material.h; sourceTree = "<group>"; };
+		AC84E5531CC52F8100500E2B /* Hit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hit.h; path = final/Hit.h; sourceTree = "<group>"; };
+		AC84E5541CC52F8100500E2B /* TG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TG.h; path = final/TG.h; sourceTree = "<group>"; };
+		AC84E5551CC52F8100500E2B /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = final/main.h; sourceTree = "<group>"; };
 		ACB9B67C1CB4474500E7E35D /* final */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = final; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB9B6861CB4475600E7E35D /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		ACB9B6881CB4475C00E7E35D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -105,6 +119,17 @@
 		ACB9B6731CB4474500E7E35D = {
 			isa = PBXGroup;
 			children = (
+				AC84E54B1CC52F8100500E2B /* Texture.h */,
+				AC84E54C1CC52F8100500E2B /* Texture.cpp */,
+				AC84E54D1CC52F8100500E2B /* Terrain.h */,
+				AC84E54E1CC52F8100500E2B /* PerspectiveCamera.cpp */,
+				AC84E54F1CC52F8100500E2B /* PerlinNoise.h */,
+				AC84E5501CC52F8100500E2B /* Ray.h */,
+				AC84E5511CC52F8100500E2B /* PerlinNoise.cpp */,
+				AC84E5521CC52F8100500E2B /* Material.h */,
+				AC84E5531CC52F8100500E2B /* Hit.h */,
+				AC84E5541CC52F8100500E2B /* TG.h */,
+				AC84E5551CC52F8100500E2B /* main.h */,
 				ACB9B6881CB4475C00E7E35D /* OpenGL.framework */,
 				ACB9B6861CB4475600E7E35D /* GLUT.framework */,
 				ACB9B67E1CB4474500E7E35D /* final */,
@@ -259,6 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC84E5561CC52F8100500E2B /* Texture.cpp in Sources */,
 				ACB9B6F51CB44C5500E7E35D /* Makefile in Sources */,
 				ACB9B6DE1CB449D200E7E35D /* main.cpp in Sources */,
 				ACB9B69C1CB4479500E7E35D /* Matrix4f.cpp in Sources */,
@@ -267,6 +293,8 @@
 				ACB9B6A01CB4479500E7E35D /* Vector4f.cpp in Sources */,
 				ACB9B6DA1CB4492C00E7E35D /* camera.cpp in Sources */,
 				ACB9B69E1CB4479500E7E35D /* Vector2f.cpp in Sources */,
+				AC84E5581CC52F8100500E2B /* PerlinNoise.cpp in Sources */,
+				AC84E5571CC52F8100500E2B /* PerspectiveCamera.cpp in Sources */,
 				ACB9B69D1CB4479500E7E35D /* Quat4f.cpp in Sources */,
 				ACB9B6D61CB4492C00E7E35D /* GridSystem.cpp in Sources */,
 				ACB9B69A1CB4479500E7E35D /* Matrix2f.cpp in Sources */,

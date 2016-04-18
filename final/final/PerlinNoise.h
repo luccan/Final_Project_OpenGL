@@ -7,7 +7,11 @@
 
 #include <cmath>
 #include <cstdio>
+#ifdef __APPLE__
+#include "Vector3f.h"
+#else
 #include <Vector3f.h>
+#endif
 #include "Perlin.h"
 
 class PerlinNoise: public Perlin
