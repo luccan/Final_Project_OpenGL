@@ -18,7 +18,7 @@ public:
 	this->material = material ; 
 	}
 	
-	virtual bool intersect( const Ray& r , Hit& h, float tmin) = 0;
+	virtual bool intersect( const Ray& r , Hit& h, float tmin, float d) = 0;
 
 
 	char* type;

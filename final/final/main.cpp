@@ -94,17 +94,17 @@ namespace
 				camera.SetCenter(Vector3f(0, 0, 0));
 				break;
 			}
-		case 'c':
-		case 'C':
-			gCurveMode = (gCurveMode + 1) % 3;
+		case 'w':
+		case 'W':
+			break;
+		case 'a':
+		case 'A':
 			break;
 		case 's':
 		case 'S':
-			gSurfaceMode = (gSurfaceMode + 1) % 3;
-			break;
-		case 'p':
-		case 'P':
-			gPointMode = (gPointMode + 1) % 2;
+			break;		
+		case 'd':
+		case 'D':
 			break;
 		default:
 			cout << "Unhandled key press " << key << "." << endl;
@@ -139,10 +139,8 @@ namespace
 			{
 				Ray r = camera.generateRay(Vector2f(x, y));   
 				Hit h = Hit(FLT_MAX, NULL, Vector3f(0.0f, 0.0f, 0.0f));
-				if (temp[i][j].intersect(r, h, camera.getTMin()))
-				{
-					cout << "i , j :: " << i << "," << j;
-				}
+				float d = camera.GetDistance();//(camera.GetCenter() - temp[i][j].getXYZ()).abs();
+				cout << temp[i][j].intersectplane(r.getOrigin(), r.getDirection().normalized(), temp[i][j].getXYZ(), temp[i][j].getNormal()) << endl;
 			}
 		}
 
@@ -618,7 +616,7 @@ int main(int argc, char* argv[])
 	camera.SetDimensions(600, 600);
 
 	camera.SetDistance(10);
-	camera.SetCenter(Vector3f(0, 0, 0));
+	camera.SetCenter(Vector3f(1, 1, 1));
 
 	glutCreateWindow("GNV Final Project");
 

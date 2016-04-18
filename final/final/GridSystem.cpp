@@ -16,7 +16,7 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 {
 	this->w = w;
 	this->h = h;
-	float size = 0.2f;
+	float size = 0.5f;
 	this->p = p;
 	float octave = 1.0f;
 	//initialize grids
@@ -63,7 +63,7 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 			Vector3f ac = grids[i][j].getXYZ() - grids[i][j].neighbours[1];
 			Vector3f ad = grids[i][j].getXYZ() - grids[i][j].neighbours[2];
 			Vector3f ae = grids[i][j].getXYZ() - grids[i][j].neighbours[3];
-			Vector3f aNormal = Vector3f::cross(ab, ac) + Vector3f::cross(ac, ad) + Vector3f::cross(ad, ae) + Vector3f::cross(ae, ab);
+			Vector3f aNormal = (Vector3f::cross(ab, ac) + Vector3f::cross(ac, ad) + Vector3f::cross(ad, ae) + Vector3f::cross(ae, ab)).normalized();
 			grids[i][j].assignNormal(aNormal);
 		}
 	}

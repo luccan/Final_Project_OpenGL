@@ -22,7 +22,14 @@ public:
 	Texture getTexture();
 	vector<Vector3f> neighbours;
 
-	virtual bool Grid::intersect(const Ray& r, Hit& h, float tmin)
+	Vector3f getNormal() { return this->normal; }
+
+	virtual float Grid::intersectplane(Vector3f r_origin, Vector3f r_dir, Vector3f plane_point, Vector3f normal)
+	{
+		return Vector3f::dot(plane_point - r_origin, normal) / Vector3f::dot(r_dir, normal);
+	}
+
+	virtual bool Grid::intersect(const Ray& r, Hit& h, float tmin, float d)
 	{
 		Vector3f R_o = r.getOrigin();
 		Vector3f R_d = r.getDirection().normalized();
@@ -34,7 +41,7 @@ public:
 		}
 
 		float nDotR_o = Vector3f::dot(this->normal, R_o);
-		float t = -1.0*(-1.0*this->d + nDotR_o) / (nDotR_d);
+		float t = -1.0*(-1.0*d + nDotR_o) / (nDotR_d);
 
 		if (t > tmin && t < h.getT())
 		{
@@ -45,12 +52,13 @@ public:
 		{
 			return false;
 		}
+
 	}
 private:
 	Vector3f xyz;
 	float noiseval;
 	Texture texture;
 	Vector3f normal;
-	float d;
+	//float d =20.0f;
 };
 #endif // !GRID_H
