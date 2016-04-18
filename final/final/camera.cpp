@@ -249,4 +249,3 @@ void Camera::DistanceZoom(int x, int y)
     // exponential zoom factor
     mCurrentDistance = mStartDistance * exp(delta);  
 }
-

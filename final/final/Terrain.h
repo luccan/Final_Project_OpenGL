@@ -1,14 +1,14 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "Perlin.h"
+#include "PerlinNoise.h"
 #include "GridSystem.h"
 
 class Terrain
 {
 public:
 	Terrain();
-	Terrain(Perlin &p, int w, int h);
+	Terrain(PerlinNoise &p, int w, int h);
 	GridSystem getGridSystem();
 	void SetGridSystem(GridSystem &gs);
 private:

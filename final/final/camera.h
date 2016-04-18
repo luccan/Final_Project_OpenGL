@@ -9,6 +9,7 @@
 #include "vecmath.h"
 #else
 #include <vecmath.h>
+#include "Ray.h"
 #endif
 
 class Camera
@@ -47,7 +48,7 @@ public:
     Vector3f GetCenter() const { return mCurrentCenter; }
     Matrix4f GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
-    
+	Ray generateRay(const Vector2f& p);
 private:
 
     // States 
@@ -74,4 +75,24 @@ private:
     void DistanceZoom(int x, int y);
 };
 
+class PerspectiveCamera : public Camera
+{
+public:
+	PerspectiveCamera(const Vector3f& center, const Vector3f& direction, const Vector3f& up, float angle);
+
+	virtual Ray generateRay(const Vector2f& point);
+
+	virtual float getTMin() const
+	{
+		return 0.0f;
+	}
+
+private:
+	Vector3f center;
+	Vector3f w;
+	Vector3f u;
+	Vector3f v;
+	float angle;
+
+};
 #endif

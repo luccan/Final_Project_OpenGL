@@ -4,12 +4,13 @@
 
 Texture::Texture()
 {
-	
+
 }
 
 Texture::Texture(TYPE type)
 {
-	switch (type){
+	switch (type)
+	{
 	case GRASS:
 		this->rgb = Vector3f(0.0f, 0.7f, 0.0f); //green
 		break;
@@ -29,4 +30,9 @@ Texture::Texture(TYPE type)
 void Texture::chooseTexture()
 {
 	glColor3f(rgb.x(), rgb.y(), rgb.z());
+}
+
+void Texture::chooseTexture(float alpha)
+{
+	glColor4f(rgb.x(), rgb.y(), rgb.z(), alpha);
 }

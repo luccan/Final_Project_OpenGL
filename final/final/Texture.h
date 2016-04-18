@@ -13,6 +13,7 @@ public:
 	Texture();
 	Texture(TYPE type);
 	void chooseTexture();
+	void chooseTexture(float alpha);
 private:
 	Vector3f rgb;
 };

@@ -8,7 +8,7 @@
 #endif
 #include <vector>
 #include "Grid.h"
-#include "Perlin.h"
+#include "PerlinNoise.h"
 
 using namespace std;
 
@@ -16,11 +16,11 @@ class GridSystem
 {
 public:
 	GridSystem();
-	GridSystem(int w, int h, Perlin p);
+	GridSystem(int w, int h, PerlinNoise p);
 	void drawMesh();
 private:
 	vector<vector<Grid>> grids; //grids[x][y]
-	Perlin p;
+	PerlinNoise p;
 	int w;
 	int h;
 };
