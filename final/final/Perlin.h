@@ -11,15 +11,12 @@ public:
 	Perlin();
 	float octave_noise(float x, float y, float z, float persistence, float amplitude, float octave);
 	float noise(float x, float y, float z);
-
-
 private:
 	int inc(int num);
 	float grad(int hash, float x, float y, float z);
 	float fade(float t);
 	float lerp(float a, float b, float z);
 	vector<int> p;
-
 };
 
 #endif

@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <vector>
+#include <time.h>
 
 
 #ifdef __APPLE__
@@ -595,6 +596,9 @@ int main(int argc, char* argv[])
 {
 	// Load in from standard input
 	//loadObjects(argc, argv);
+
+	/* initialize random seed: */
+	srand(time(NULL));
 
 	glutInit(&argc, argv);
 

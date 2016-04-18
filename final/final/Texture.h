@@ -13,7 +13,9 @@ public:
 	Texture();
 	Texture(TYPE type);
 	void chooseTexture();
+	TYPE getTexture();
 private:
 	Vector3f rgb;
+	TYPE type;
 };
 #endif // !GRID_H

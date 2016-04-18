@@ -24,6 +24,9 @@ void Grid::assignNoise(float val)
 	if (val > 1.9f){
 		this->texture = Texture(Texture::MOUNTAIN);
 	}
+	else if (val < 1.0f){
+		this->texture = Texture(Texture::MUD);
+	}
 	else {
 		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		if (r > 0.5){
@@ -34,6 +37,27 @@ void Grid::assignNoise(float val)
 		}
 	}
 }
+
+void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_left){
+	this->neighbors[0] = &n_up;
+	this->neighbors[1] = &n_right;
+	this->neighbors[2] = &n_down;
+	this->neighbors[3] = &n_left;
+}
+
+void Grid::naturalizeGrid(){
+	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	if (r < 0.2){
+		this->texture = Texture(this->neighbors[0]->getTexture().getTexture());
+	} else if (r < 0.4){
+		this->texture = Texture(this->neighbors[1]->getTexture().getTexture());
+	} else if (r < 0.6){
+		this->texture = Texture(this->neighbors[2]->getTexture().getTexture());
+	} else if (r < 0.8){
+		this->texture = Texture(this->neighbors[3]->getTexture().getTexture());
+	}
+}
+
 float Grid::getNoiseVal()
 {
 	return this->noiseval;
