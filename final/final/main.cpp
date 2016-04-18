@@ -35,8 +35,8 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
-
+	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0, 0, 0), Vector3f(0, 0, -1), Vector3f(0, 1, 0), 30.0f);
+	
 	// These are state variables for the UI
 	bool gMousePressed = false;
 	int  gCurveMode = 1;
@@ -88,12 +88,12 @@ namespace
 			exit(0);
 			break;
 		case ' ':
-		{
-			Matrix4f eye = Matrix4f::identity();
-			camera.SetRotation(eye);
-			camera.SetCenter(Vector3f(0, 0, 0));
-			break;
-		}
+			{
+				Matrix4f eye = Matrix4f::identity();
+				camera.SetRotation(eye);
+				camera.SetCenter(Vector3f(0, 0, 0));
+				break;
+			}
 		case 'c':
 		case 'C':
 			gCurveMode = (gCurveMode + 1) % 3;
@@ -131,6 +131,22 @@ namespace
 	//  Called when mouse button is pressed.
 	void mouseFunc(int button, int state, int x, int y)
 	{
+		vector<vector<Grid>> temp = terrain.getGridSystem().getGrids();
+		Ray r();
+
+		for (int i = 0; i < temp.size(); i++)
+		{
+			for (int j = 0; j < temp[i].size(); j++)
+			{
+				Ray r = camera.generateRay(Vector2f(x, y));
+				Hit h = Hit(FLT_MAX, NULL, Vector3f(0.0f, 0.0f, 0.0f));
+
+				if (temp[i][j].intersect(r, h, 0.0f))
+				{
+					cout << "i , j :: " << i << "," << j;
+				}
+			}
+		}
 
 		if (state == GLUT_DOWN)
 		{
@@ -139,7 +155,7 @@ namespace
 			switch (button)
 			{
 			case GLUT_LEFT_BUTTON:
-				camera.MouseClick(Camera::LEFT, x, y);				
+				camera.MouseClick(Camera::LEFT, x, y);
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);
@@ -431,7 +447,8 @@ namespace
 
 	}
 
-	void displayTerrain(){
+	void displayTerrain()
+	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
@@ -443,6 +460,7 @@ namespace
 		// Light color (RGBA)
 		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
+
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
 		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
 
@@ -463,7 +481,8 @@ namespace
 		glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 	}
 
-	void displayCube() {
+	void displayCube()
+	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
@@ -570,6 +589,7 @@ namespace
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
+		
 		if (gMousePressed)
 		{
 			glPushMatrix();
@@ -603,7 +623,7 @@ int main(int argc, char* argv[])
 	camera.SetDistance(10);
 	camera.SetCenter(Vector3f(0, 0, 0));
 
-	glutCreateWindow("Carry Win Go");
+	glutCreateWindow("GNV Final Project");
 
 	// Initialize OpenGL parameters.
 	initRendering();
@@ -620,7 +640,7 @@ int main(int argc, char* argv[])
 	glutReshapeFunc(reshapeFunc);
 
 	PerlinNoise perlin = PerlinNoise();
-	terrain = Terrain(perlin, 10, 10);
+	terrain = Terrain(perlin, 20, 20);
 	// Call this whenever window needs redrawing
 	//glutDisplayFunc(drawScene);
 	glutDisplayFunc(displayTerrain);

@@ -15,6 +15,7 @@ public:
 	Grid(float x, float y, float z);
 	Grid(float x, float y, float z, Texture t);
 	void assignNoise(float val);
+	void assignNormal(Vector3f n) { this->normal = n; }
 	float getNoiseVal();
 	Vector3f getXYZ();
 	Texture getTexture();
