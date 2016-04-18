@@ -131,6 +131,8 @@ namespace
 	//  Called when mouse button is pressed.
 	void mouseFunc(int button, int state, int x, int y)
 	{
+		for (int i = 0; i < Grid)
+
 		if (state == GLUT_DOWN)
 		{
 			gMousePressed = true;
@@ -138,8 +140,7 @@ namespace
 			switch (button)
 			{
 			case GLUT_LEFT_BUTTON:
-				camera.MouseClick(Camera::LEFT, x, y);
-				
+				camera.MouseClick(Camera::LEFT, x, y);				
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);

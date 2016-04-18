@@ -45,4 +45,4 @@ Vector3f Grid::getXYZ()
 Texture Grid::getTexture()
 {
 	return this->texture;
-}
+}	

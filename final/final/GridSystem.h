@@ -18,6 +18,7 @@ public:
 	GridSystem();
 	GridSystem(int w, int h, PerlinNoise p);
 	void drawMesh();
+	vector<Grid> 
 private:
 	vector<vector<Grid>> grids; //grids[x][y]
 	PerlinNoise p;
