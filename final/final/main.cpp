@@ -132,16 +132,14 @@ namespace
 	void mouseFunc(int button, int state, int x, int y)
 	{
 		vector<vector<Grid>> temp = terrain.getGridSystem().getGrids();
-		Ray r();
-
+		//cout << "x:y - " << x << "," << y << endl;
 		for (int i = 0; i < temp.size(); i++)
 		{
 			for (int j = 0; j < temp[i].size(); j++)
 			{
-				Ray r = camera.generateRay(Vector2f(x, y));
+				Ray r = camera.generateRay(Vector2f(x, y));   
 				Hit h = Hit(FLT_MAX, NULL, Vector3f(0.0f, 0.0f, 0.0f));
-
-				if (temp[i][j].intersect(r, h, 0.0f))
+				if (temp[i][j].intersect(r, h, camera.getTMin()))
 				{
 					cout << "i , j :: " << i << "," << j;
 				}
@@ -456,7 +454,6 @@ namespace
 		glEnable(GL_COLOR_MATERIAL);
 
 		glLoadIdentity();                 // Reset the model-view matrix
-
 		// Light color (RGBA)
 		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };

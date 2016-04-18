@@ -6,14 +6,23 @@ Grid::Grid()
 {
 }
 
-Grid::Grid(float x, float y, float z)
+Grid::Grid(float x, float y, float z, float size)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
+	this->corners.push_back(Vector3f(x, 0.0f, z));
+	this->corners.push_back(Vector3f(x + size, 0.0f, z));
+	this->corners.push_back(Vector3f(x, 0.0f, z + size));
+	this->corners.push_back(Vector3f(x + size, 0.0f, z + size));
 }
 
-Grid::Grid(float x, float y, float z, Texture t)
+Grid::Grid(float x, float y, float z, float size, Texture t)
 {
+
 	this->xyz = Vector3f(x, 0.0f, z);
+	this->corners.push_back(Vector3f(x, 0.0f, z));
+	this->corners.push_back(Vector3f(x + size, 0.0f, z));
+	this->corners.push_back(Vector3f(x, 0.0f, z + size));
+	this->corners.push_back(Vector3f(x + size, 0.0f, z + size));
 	this->texture = t;
 }
 
@@ -33,6 +42,7 @@ void Grid::assignNoise(float val)
 			this->texture = Texture(Texture::GRASS);
 		}
 	}
+	this->normal = Vector3f::dot(this->corners[0], this->corners[1]);
 }
 float Grid::getNoiseVal()
 {
@@ -46,3 +56,8 @@ Texture Grid::getTexture()
 {
 	return this->texture;
 }	
+
+void Grid::print()
+{
+	this->xyz.print();
+}

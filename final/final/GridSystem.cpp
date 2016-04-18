@@ -19,14 +19,14 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 	float offset = 0.2f;
 	this->p = p;
 	float octave = 1.0f;
-
+	float size = 0.4f;
 	//initialize grids
 	for (float i = 0.0f; i <= w; i += offset)
 	{
 		vector<Grid> gridRow;
 		for (float j = 0.0f; j <= h; j += offset)
 		{
-			Grid g = Grid(i, 0.0f, j);
+			Grid g = Grid(i, 0.0f, j, size);
 			if (i == 0.0f || (i + (2 * offset)) > w || j == offset || (j + (2 * offset)) > h)
 			{
 				//g.assignNoise(p.octaveNoise(Vector3f(i, 0.0f, j), octave));
@@ -43,7 +43,6 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 			}
 			gridRow.push_back(g);
 		}
-		cout << endl;
 		grids.push_back(gridRow);
 	}
 }
