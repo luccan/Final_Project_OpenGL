@@ -20,7 +20,7 @@ public:
 	float getNoiseVal();
 	Vector3f getXYZ();
 	Texture getTexture();
-	vector<Vector3f> corners;
+	vector<Vector3f> neighbours;
 
 	virtual bool Grid::intersect(const Ray& r, Hit& h, float tmin)
 	{

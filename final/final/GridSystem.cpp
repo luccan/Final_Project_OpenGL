@@ -44,22 +44,27 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 	}
 	//assign normals
 
-	for (int i = 0; i < grids.size()-1; i++)
+	for (int i = 1; i < grids.size()-1; i++)
 	{
-		for (int j = 0; j < grids[i].size()-1; j++)
+		for (int j = 1; j < grids[i].size()-1; j++)
 		{
-			grids[i][j].corners.push_back(grids[i][j].getXYZ());
-			grids[i][j].corners.push_back(grids[i][j + 1].getXYZ());
-			grids[i][j].corners.push_back(grids[i + 1][j].getXYZ());
-			grids[i][j].corners.push_back(grids[i + 1][j + 1].getXYZ());
+			grids[i][j].neighbours.push_back(grids[i-1][j].getXYZ());
+			grids[i][j].neighbours.push_back(grids[i][j - 1].getXYZ());
+			grids[i][j].neighbours.push_back(grids[i +1][j].getXYZ());
+			grids[i][j].neighbours.push_back(grids[i][j + 1].getXYZ());
 		}
 	}
 
-	for (int i = 0; i < grids.size()-1; i++)
+	for (int i = 1; i < grids.size()-1; i++)
 	{
-		for (int j = 0; j < grids[i].size()-1; j++)
+		for (int j = 1; j < grids[i].size()-1; j++)
 		{
-			grids[i][j].assignNormal(Vector3f::cross(grids[i][j].corners[0], grids[i][j].corners[1]).normalized());
+			Vector3f ab = grids[i][j].getXYZ() - grids[i][j].neighbours[0];
+			Vector3f ac = grids[i][j].getXYZ() - grids[i][j].neighbours[1];
+			Vector3f ad = grids[i][j].getXYZ() - grids[i][j].neighbours[2];
+			Vector3f ae = grids[i][j].getXYZ() - grids[i][j].neighbours[3];
+			Vector3f aNormal = Vector3f::cross(ab, ac) + Vector3f::cross(ac, ad) + Vector3f::cross(ad, ae) + Vector3f::cross(ae, ab);
+			grids[i][j].assignNormal(aNormal);
 		}
 	}
 }
