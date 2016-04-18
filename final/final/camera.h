@@ -82,6 +82,7 @@ public:
 	Vector3f getCameraLocation();
 	virtual Ray generateRay(const Vector2f& point);
 	void setDirection(Vector3f dir);
+	Vector3f getDirection() { return this->direction; }
 	virtual float getTMin() const
 	{
 		return 0.0f;

@@ -131,6 +131,8 @@ namespace
 	//  Called when mouse button is pressed.
 	void mouseFunc(int button, int state, int x, int y)
 	{
+		camera.setDirection(camera.GetCenter() - camera.getCameraLocation());
+
 		vector<vector<Grid>> temp = terrain.getGridSystem().getGrids();
 		//cout << "x:y - " << x << "," << y << endl;
 		for (int i = 0; i < temp.size(); i++)
@@ -152,7 +154,7 @@ namespace
 		cout << endl;
 
 		cout << "Direction ";
-		(camera.GetCenter()- camera.getCameraLocation()).print();
+		camera.getDirection().print();
 		cout << endl;
 
 		if (state == GLUT_DOWN)
@@ -163,7 +165,6 @@ namespace
 			{
 			case GLUT_LEFT_BUTTON:
 				camera.MouseClick(Camera::LEFT, x, y);
-				camera.setDirection(camera.GetCenter() - camera.getCameraLocation());
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);
