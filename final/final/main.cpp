@@ -22,7 +22,7 @@
 //#include "curve.h"
 //#include "surf.h"
 #include "extra.h"
-#include "camera.h"
+#include "PerspectiveCamera.h"
 #include "Terrain.h"
 #include "PerlinNoise.h"
 
@@ -37,8 +37,7 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	//PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
-	Camera camera;
+	PerspectiveCamera camera;
 
 	// These are state variables for the UI
 	bool gMousePressed = false;
@@ -457,6 +456,7 @@ namespace
 			terrain.getGridSystem().drawMeshSkeleton();
 		}
 		
+		camera.drawRay();
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
