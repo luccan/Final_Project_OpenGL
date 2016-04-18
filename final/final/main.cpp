@@ -131,7 +131,6 @@ namespace
 	//  Called when mouse button is pressed.
 	void mouseFunc(int button, int state, int x, int y)
 	{
-		for (int i = 0; i < Grid)
 
 		if (state == GLUT_DOWN)
 		{
