@@ -9,6 +9,7 @@ Texture::Texture()
 
 Texture::Texture(TYPE type)
 {
+	this->type = type;
 	switch (type){
 	case GRASS:
 		this->rgb = Vector3f(0.1f, 0.2f, 0.1f); //green
@@ -24,6 +25,10 @@ Texture::Texture(TYPE type)
 		this->rgb = Vector3f(0.0f, 0.0f, 0.0f);
 		break;
 	}
+}
+
+Texture::TYPE Texture::getTexture(){
+	return this->type;
 }
 
 void Texture::chooseTexture()

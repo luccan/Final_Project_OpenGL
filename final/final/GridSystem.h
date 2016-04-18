@@ -18,6 +18,7 @@ public:
 	GridSystem();
 	GridSystem(int w, int h, Perlin p);
 	void drawMesh();
+	void drawMeshSkeleton();
 private:
 	vector<vector<Grid>> grids; //grids[x][y]
 	Perlin p;
