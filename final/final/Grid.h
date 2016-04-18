@@ -12,16 +12,15 @@ class Grid : public Object3D
 {
 public:
 	Grid();
-	Grid(float x, float y, float z, float size);
-	Grid(float x, float y, float z, float size, Texture t);
+	Grid(float x, float y, float z);
+	Grid(float x, float y, float z, Texture t);
 	void print();
 	void assignNoise(float val);
 	void assignNormal(Vector3f n) { this->normal = n; }
 	float getNoiseVal();
 	Vector3f getXYZ();
 	Texture getTexture();
-
-	
+	vector<Vector3f> corners;
 
 	virtual bool Grid::intersect(const Ray& r, Hit& h, float tmin)
 	{
@@ -52,7 +51,6 @@ private:
 	float noiseval;
 	Texture texture;
 	Vector3f normal;
-	vector<Vector3f> corners;
 	float d;
 };
 #endif // !GRID_H

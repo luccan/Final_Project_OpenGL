@@ -6,23 +6,15 @@ Grid::Grid()
 {
 }
 
-Grid::Grid(float x, float y, float z, float size)
+Grid::Grid(float x, float y, float z)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
-	this->corners.push_back(Vector3f(x, 0.0f, z));
-	this->corners.push_back(Vector3f(x + size, 0.0f, z));
-	this->corners.push_back(Vector3f(x, 0.0f, z + size));
-	this->corners.push_back(Vector3f(x + size, 0.0f, z + size));
 }
 
-Grid::Grid(float x, float y, float z, float size, Texture t)
+Grid::Grid(float x, float y, float z,Texture t)
 {
 
 	this->xyz = Vector3f(x, 0.0f, z);
-	this->corners.push_back(Vector3f(x, 0.0f, z));
-	this->corners.push_back(Vector3f(x + size, 0.0f, z));
-	this->corners.push_back(Vector3f(x, 0.0f, z + size));
-	this->corners.push_back(Vector3f(x + size, 0.0f, z + size));
 	this->texture = t;
 }
 
@@ -33,16 +25,18 @@ void Grid::assignNoise(float val)
 	if (val > 2.0f){
 		this->texture = Texture(Texture::MOUNTAIN);
 	}
-	else {
+	else
+	{
 		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		if (r > 0.5){
+		if (r > 0.5)
+		{
 			this->texture = Texture(Texture::MUD);
 		}
-		else {
+		else
+		{
 			this->texture = Texture(Texture::GRASS);
 		}
 	}
-	this->normal = Vector3f::dot(this->corners[0], this->corners[1]);
 }
 float Grid::getNoiseVal()
 {

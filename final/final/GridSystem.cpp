@@ -16,34 +16,51 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 {
 	this->w = w;
 	this->h = h;
-	float offset = 0.2f;
+	float size = 0.2f;
 	this->p = p;
 	float octave = 1.0f;
-	float size = 0.4f;
 	//initialize grids
-	for (float i = 0.0f; i <= w; i += offset)
+	for (float i = 0.0f; i <= w; i += size)
 	{
 		vector<Grid> gridRow;
-		for (float j = 0.0f; j <= h; j += offset)
+		for (float j = 0.0f; j <= h; j += size)
 		{
-			Grid g = Grid(i, 0.0f, j, size);
-			if (i == 0.0f || (i + (2 * offset)) > w || j == offset || (j + (2 * offset)) > h)
+			Grid g = Grid(i, 0.0f, j);
+			if (i == 0.0f || (i + (2 * size)) > w || j == size || (j + (2 * size)) > h)
 			{
 				//g.assignNoise(p.octaveNoise(Vector3f(i, 0.0f, j), octave));
 				g.assignNoise(p.octaveNoise(i, 0.0f, j, 1.0f, 2.0f, 3));
-				g.assignNormal(Vector3f(0, 1, 0));
 				//cout << " " << g.getNoiseVal() << " ";
 			}
 			else
 			{
 				g.assignNoise(p.octaveNoise(i, 0.0f, j, 1.0f, 3.0f, 3)*2.3);
-				g.assignNormal(Vector3f(0, 1, 0));
 				//g.assignNoise(p.octaveNoise(Vector3f(i, 0.0f, j), octave) * 2);
 				//cout << " " << g.getNoiseVal() << " ";
 			}
 			gridRow.push_back(g);
 		}
 		grids.push_back(gridRow);
+	}
+	//assign normals
+
+	for (int i = 0; i < grids.size()-1; i++)
+	{
+		for (int j = 0; j < grids[i].size()-1; j++)
+		{
+			grids[i][j].corners.push_back(grids[i][j].getXYZ());
+			grids[i][j].corners.push_back(grids[i][j + 1].getXYZ());
+			grids[i][j].corners.push_back(grids[i + 1][j].getXYZ());
+			grids[i][j].corners.push_back(grids[i + 1][j + 1].getXYZ());
+		}
+	}
+
+	for (int i = 0; i < grids.size()-1; i++)
+	{
+		for (int j = 0; j < grids[i].size()-1; j++)
+		{
+			grids[i][j].assignNormal(Vector3f::cross(grids[i][j].corners[0], grids[i][j].corners[1]).normalized());
+		}
 	}
 }
 
