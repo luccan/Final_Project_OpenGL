@@ -24,11 +24,6 @@ public:
 
 	Vector3f getNormal() { return this->normal; }
 
-	virtual float Grid::intersectplane(Vector3f r_origin, Vector3f r_dir, Vector3f plane_point, Vector3f normal)
-	{
-		return Vector3f::dot(plane_point - r_origin, normal) / Vector3f::dot(r_dir, normal);
-	}
-
 	virtual bool Grid::intersect(const Ray& r, Hit& h, float tmin, float d)
 	{
 		Vector3f R_o = r.getOrigin();

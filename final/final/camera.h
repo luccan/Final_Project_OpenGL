@@ -78,10 +78,10 @@ private:
 class PerspectiveCamera : public Camera
 {
 public:
-	PerspectiveCamera(const Vector3f& center, const Vector3f& direction, const Vector3f& up, float angle);
-
+	PerspectiveCamera(const Vector3f& center, const Vector3f& up, float angle);
+	Vector3f getCameraLocation();
 	virtual Ray generateRay(const Vector2f& point);
-
+	void setDirection(Vector3f dir);
 	virtual float getTMin() const
 	{
 		return 0.0f;
@@ -89,6 +89,7 @@ public:
 
 private:
 	Vector3f center;
+	Vector3f direction;
 	Vector3f w;
 	Vector3f u;
 	Vector3f v;

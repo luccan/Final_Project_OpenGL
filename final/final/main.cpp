@@ -35,8 +35,8 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0, 0, 0), Vector3f(0, 0, -1), Vector3f(0, 1, 0), 30.0f);
-	
+	PerspectiveCamera camera = PerspectiveCamera(Vector3f(0, 0, 0), Vector3f(0, 1, 0), 30.0f);
+
 	// These are state variables for the UI
 	bool gMousePressed = false;
 	int  gCurveMode = 1;
@@ -102,7 +102,7 @@ namespace
 			break;
 		case 's':
 		case 'S':
-			break;		
+			break;
 		case 'd':
 		case 'D':
 			break;
@@ -137,12 +137,23 @@ namespace
 		{
 			for (int j = 0; j < temp[i].size(); j++)
 			{
-				Ray r = camera.generateRay(Vector2f(x, y));   
+				Ray r = camera.generateRay(Vector2f(x, y));
 				Hit h = Hit(FLT_MAX, NULL, Vector3f(0.0f, 0.0f, 0.0f));
-				float d = camera.GetDistance();//(camera.GetCenter() - temp[i][j].getXYZ()).abs();
-				cout << temp[i][j].intersectplane(r.getOrigin(), r.getDirection().normalized(), temp[i][j].getXYZ(), temp[i][j].getNormal()) << endl;
+				//float d = camera.GetDistance();//(camera.GetCenter() - temp[i][j].getXYZ()).abs();
+				if (temp[i][j].intersect(r, h, camera.getTMin(), 0.0f))
+				{
+					cout << "i , j :: " << i << "," << j << endl;
+				}
 			}
 		}
+
+		cout << "Location ";
+		camera.getCameraLocation().print();
+		cout << endl;
+
+		cout << "Direction ";
+		(camera.GetCenter()- camera.getCameraLocation()).print();
+		cout << endl;
 
 		if (state == GLUT_DOWN)
 		{
@@ -152,6 +163,7 @@ namespace
 			{
 			case GLUT_LEFT_BUTTON:
 				camera.MouseClick(Camera::LEFT, x, y);
+				camera.setDirection(camera.GetCenter() - camera.getCameraLocation());
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);
@@ -584,7 +596,7 @@ namespace
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
-		
+
 		if (gMousePressed)
 		{
 			glPushMatrix();
@@ -616,7 +628,7 @@ int main(int argc, char* argv[])
 	camera.SetDimensions(600, 600);
 
 	camera.SetDistance(10);
-	camera.SetCenter(Vector3f(1, 1, 1));
+	//camera.SetCenter(Vector3f(1, 1, 1));
 
 	glutCreateWindow("GNV Final Project");
 

@@ -174,8 +174,6 @@ void Camera::ArcBallRotation(int x, int y)
     {
         mCurrentRot = mStartRot;
     }
-
-
 }
 
 void Camera::PlaneTranslation(int x, int y)
