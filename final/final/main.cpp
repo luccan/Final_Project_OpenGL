@@ -657,12 +657,7 @@ int main(int argc, char* argv[])
 
 	camera.SetDimensions(600, 600);
 
-	camera.SetDistance(30);
-	camera.SetCenter(Vector3f(5, -10, 5));
-    camera.SetRotation(Matrix4f::Matrix4f(1,0,0,0,
-                                        0,0,1,0,
-                                        0,1,0,0,
-                                        0,0,0,1));
+	camera.SetDistance(10);
 
 
 	glutCreateWindow("Carry Win Go");
