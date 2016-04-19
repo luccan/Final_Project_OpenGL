@@ -37,8 +37,19 @@ namespace
 	// Global variables here.
 
 	// This is the camera
+
 	PerspectiveCamera camera;
 
+    //camera variables
+
+    Vector3f pos;
+    
+    Vector3f cameraDir;
+    Vector3f up = Vector3f::Vector3f (0.0f, -1.0f, 0.0f);
+    Vector3f cameraRight;
+    Vector3f cameraUp;
+    Vector3f cameraFront;
+    GLfloat cameraSpeed;
 	// These are state variables for the UI
 	bool gMousePressed = false;
 	int  gCurveMode = 1;
@@ -85,6 +96,12 @@ namespace
 	// received.
 	void keyboardFunc(unsigned char key, int x, int y)
 	{
+        cameraDir = (camera.GetCenter()-camera.getCameraLocation()).normalized();
+        
+        cameraRight = Vector3f::cross(up, cameraDir).normalized();
+        cameraUp = Vector3f::cross(cameraDir, cameraRight).normalized();
+        cameraSpeed = 0.05f;
+        cameraFront = camera.GetCenter()-camera.getCameraLocation();
 		switch (key)
 		{
 		case 27: // Escape key
@@ -97,22 +114,51 @@ namespace
 			camera.SetCenter(Vector3f(0, 0, 0));
 			break;
 		}
+		
 		case 'c':
-		case 'C':
 			gCurveMode = (gCurveMode + 1) % 3;
 			break;
-		case 's':
-		case 'S':
+		case 'm':
 			gSurfaceMode = (gSurfaceMode + 1) % 3;
 			break;
 		case 'p':
-		case 'P':
 			gPointMode = (gPointMode + 1) % 2;
 			break;
+
 		case 't':
 		case 'T':
 			terrainMode = (terrainMode + 1) % 2;
 			break;
+
+// x is left
+// y is down
+// z is backward
+        case 'w':
+        {
+//            cameraUp.print();
+//            cameraRight.print();
+//            up.print();
+
+            
+            camera.SetCenter(camera.GetCenter()+cameraFront*cameraSpeed);
+            break;
+        }
+        case 's':
+        {
+            camera.SetCenter(camera.GetCenter()-cameraFront*cameraSpeed);
+            break;
+        }
+        case 'a':
+            {
+                camera.SetCenter(camera.GetCenter() + Vector3f::cross(cameraFront, cameraUp).normalized() * cameraSpeed);
+                break;
+            }
+        case 'd':
+            {
+                camera.SetCenter(camera.GetCenter() - Vector3f::cross(cameraFront, cameraUp).normalized() * cameraSpeed);
+                break;
+            }
+
 		default:
 			cout << "Unhandled key press " << key << "." << endl;
 		}
@@ -611,8 +657,13 @@ int main(int argc, char* argv[])
 
 	camera.SetDimensions(600, 600);
 
-	camera.SetDistance(10);
-	camera.SetCenter(Vector3f(0, 0, 0));
+	camera.SetDistance(30);
+	camera.SetCenter(Vector3f(5, -10, 5));
+    camera.SetRotation(Matrix4f::Matrix4f(1,0,0,0,
+                                        0,0,1,0,
+                                        0,1,0,0,
+                                        0,0,0,1));
+
 
 	glutCreateWindow("Carry Win Go");
 
@@ -633,7 +684,8 @@ int main(int argc, char* argv[])
 	PerlinNoise perlin = PerlinNoise();
 	terrain = Terrain(perlin, 10, 10);
 	// Call this whenever window needs redrawing
-	//glutDisplayFunc(drawScene);
+	glutDisplayFunc(drawScene);
+//    glutDisplayFunc(displayCube);
 	glutDisplayFunc(displayTerrain);
 
 	// Trigger timerFunc every 20 msec
