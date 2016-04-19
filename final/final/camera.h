@@ -48,7 +48,7 @@ public:
     Matrix4f GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
     
-private:
+protected:
 
     // States 
     int     mDimensions[2];
@@ -69,6 +69,7 @@ private:
     float   mStartDistance;
     float   mCurrentDistance;
 
+private:
     void ArcBallRotation(int x, int y);
     void PlaneTranslation(int x, int y);
     void DistanceZoom(int x, int y);

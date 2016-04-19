@@ -14,7 +14,7 @@ public:
 	PerspectiveCamera();
 	Vector3f getCameraLocation();
 	void drawRay();
-
+	Vector3f getRay();
 };
 
 #endif
