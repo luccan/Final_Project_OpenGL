@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <vector>
+#include <time.h>
 
 
 #ifdef __APPLE__
@@ -21,7 +22,7 @@
 //#include "curve.h"
 //#include "surf.h"
 #include "extra.h"
-#include "camera.h"
+#include "PerspectiveCamera.h"
 #include "Terrain.h"
 #include "PerlinNoise.h"
 
@@ -36,8 +37,7 @@ namespace
 	// Global variables here.
 
 	// This is the camera
-	//PerspectiveCamera camera = PerspectiveCamera(Vector3f(0,0,0), Vector3f(0,0,-1), Vector3f(0,1,0), 30.0f);
-	Camera camera;
+	PerspectiveCamera camera;
 
 	// These are state variables for the UI
 	bool gMousePressed = false;
@@ -67,6 +67,7 @@ namespace
 	vector<string> gSurfaceNames;
 
 	Terrain terrain;
+	char terrainMode = 0; //0 for mesh, 1 for wireframe
 
 	// Declarations of functions whose implementations occur later.
 	void arcballRotation(int endX, int endY);
@@ -107,6 +108,10 @@ namespace
 		case 'p':
 		case 'P':
 			gPointMode = (gPointMode + 1) % 2;
+			break;
+		case 't':
+		case 'T':
+			terrainMode = (terrainMode + 1) % 2;
 			break;
 		default:
 			cout << "Unhandled key press " << key << "." << endl;
@@ -444,7 +449,14 @@ namespace
 
 		camera.ApplyModelview();
 
-		terrain.getGridSystem().drawMesh();
+		if (terrainMode == 0){
+			terrain.getGridSystem().drawMesh();
+		}
+		else {
+			terrain.getGridSystem().drawMeshSkeleton();
+		}
+		
+		camera.drawRay();
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
@@ -584,6 +596,9 @@ int main(int argc, char* argv[])
 {
 	// Load in from standard input
 	//loadObjects(argc, argv);
+
+	/* initialize random seed: */
+	srand(time(NULL));
 
 	glutInit(&argc, argv);
 

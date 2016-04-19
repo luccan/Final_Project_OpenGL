@@ -42,6 +42,24 @@ GridSystem::GridSystem(int w, int h, Perlin p)
 		}
 		grids.push_back(gridRow);
 	}
+
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			Grid n_up = (i > 0) ? grids[i - 1][j] : grids[i][j];
+			Grid n_down = (i < grids.size()-1) ? grids[i + 1][j] : grids[i][j];
+			Grid n_right = (j < grids[0].size() - 1) ? grids[i][j + 1] : grids[i][j];
+			Grid n_left = (j > 0) ? grids[i][j - 1] : grids[i][j];
+			grids[i][j].setNeighboringGrid(n_up, n_right, n_down, n_left);
+		}
+	}
+
+	/*for (int a = 0; a < grids.size()*grids[0].size()*5; a++){
+		int i = rand() % grids.size();
+		int j = rand() % grids[0].size();
+		grids[i][j].naturalizeGrid();
+	}*/
 }
 
 void GridSystem::drawMesh()
@@ -105,6 +123,29 @@ void GridSystem::drawMesh()
 	glVertex(Vector3f(w, waterLevel, h));
 	glVertex(Vector3f(w, waterLevel, 0));
 
+	glEnd();
+}
+
+void GridSystem::drawMeshSkeleton(){
+	glBegin(GL_LINES);
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			if (i > 0){
+				grids[i][j].getTexture().chooseTexture();
+				glVertex(grids[i][j].getXYZ());
+				grids[i - 1][j].getTexture().chooseTexture();
+				glVertex(grids[i - 1][j].getXYZ());
+			}
+			if (j > 0){
+				grids[i][j].getTexture().chooseTexture();
+				glVertex(grids[i][j].getXYZ());
+				grids[i][j - 1].getTexture().chooseTexture();
+				glVertex(grids[i][j - 1].getXYZ());
+			}
+		}
+	}
 	glEnd();
 }
 

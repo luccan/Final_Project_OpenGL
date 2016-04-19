@@ -100,6 +100,7 @@
     <ClInclude Include="GridSystem.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="PerlinNoise.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="vecmath\include\Matrix2f.h" />
