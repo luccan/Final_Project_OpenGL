@@ -18,7 +18,7 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 	this->selectedi = -1; this->selectedj = -1;
 	this->w = w;
 	this->h = h;
-	this->offset = 0.9f;
+	this->offset = 0.1f;
 	this->p = p;
 	float persistance = 0.2f;
 	float amplitude = 1.0f;
@@ -183,11 +183,14 @@ void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
 				if (min_dist > dist){
 					min_dist = dist;
 					retij[0] = i; retij[1] = j;
+					g->show();
+					cout << "min_dist: " << min_dist << endl;
 				}
 			}
 
 		}
 	}
+	cout << "-------------" << endl;
 
 	reti = retij[0];
 	retj = retij[1];

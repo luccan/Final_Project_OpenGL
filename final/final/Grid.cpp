@@ -90,7 +90,7 @@ void Grid::setTexture(Texture t)
 	}
 }
 void Grid::show(){
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 0.0f);
 	glBegin(GL_TRIANGLES);
 	//elevate z just a bit to ensure red is visible
 	glVertex(this->getXYZ()+Vector3f(0,0,0.001)); glVertex(this->neighbors[0]->getXYZ()); glVertex(this->neighbors[1]->getXYZ());
