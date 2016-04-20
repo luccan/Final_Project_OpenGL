@@ -31,6 +31,7 @@ private:
 	Grid* selectedGrid;
 	int selectedi;
 	int selectedj;
+	float offset;
 };
 #endif // !GRIDSYSTEM_H
 

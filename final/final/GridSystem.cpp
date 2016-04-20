@@ -18,7 +18,7 @@ GridSystem::GridSystem(int w, int h, Perlin p)
 	this->selectedi = 0; this->selectedj = 0;
 	this->w = w;
 	this->h = h;
-	float offset = 0.9f;
+	this->offset = 0.9f;
 	this->p = p;
 	float persistance = 0.2f;
 	float amplitude = 1.0f;
@@ -175,13 +175,25 @@ Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
 			float dist = sqrt(pow(newray.x(), 2) + pow(newray.y(), 2) + pow(newray.z(), 2)); //dist from camera to pt
 			Vector3f extNewray = newray.normalized() * d;
 			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
-			float threshold = 2.0f;
-			if (abs(extPt.x() - p.x()) < threshold && abs(extPt.y() - p.y()) && abs(extPt.y() - p.y())){ //DUMMY LOL
+			
+			glBegin(GL_LINES);
+			glColor3f(0.0f, 1.0f, 0.0f);
+			float threshold = (d/180)*offset;
+			if (abs(extPt.x() - p.x()) < threshold \
+				&& abs(extPt.y() - p.y()) < threshold \
+				&& abs(extPt.z() - p.z()) < threshold){ //DUMMY LOL
 				if (min_dist > dist){
 					min_dist = dist;
 					ret = g;
+					Vector3f point = pc.getCameraLocation() + newray / 3.0f;
+					glVertex(point);
+					glVertex(pt);
+					cout << point.x() << " " << point.y() << " " << point.z() << " " << endl;
+					cout << pt.x() << " " << pt.y() << " " << pt.z() << " " << endl;
 				}
 			}
+			glVertex(Vector3f(0,0,0));
+			glEnd();
 		}
 	}
 
