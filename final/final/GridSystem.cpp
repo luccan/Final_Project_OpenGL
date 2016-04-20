@@ -15,7 +15,7 @@ GridSystem::GridSystem()
 
 GridSystem::GridSystem(int w, int h, PerlinNoise p)
 {
-	this->selectedi = 0; this->selectedj = 0;
+	this->selectedi = -1; this->selectedj = -1;
 	this->w = w;
 	this->h = h;
 	this->offset = 0.9f;
@@ -27,11 +27,11 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 	//initialize grids
 	for (float i = 0.0f; i < w + (offset/2); i += offset) //float correction that's why we add (offset/2)
 	{
-		vector<Grid> gridRow;
+		vector<Grid*> gridRow;
 		for (float j = 0.0; j < h + (offset/2); j += offset)
 		{
-			Grid g = Grid(i, 0.0f, j);
-			g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
+			Grid* g = new Grid(i, 0.0f, j);
+			g->assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
 			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave));
@@ -49,11 +49,11 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
-			Grid n_up = (i > 0) ? grids[i - 1][j] : grids[i][j];
-			Grid n_down = (i < grids.size()-1) ? grids[i + 1][j] : grids[i][j];
-			Grid n_right = (j < grids[0].size() - 1) ? grids[i][j + 1] : grids[i][j];
-			Grid n_left = (j > 0) ? grids[i][j - 1] : grids[i][j];
-			grids[i][j].setNeighboringGrid(n_up, n_right, n_down, n_left);
+			Grid* n_up = (i > 0) ? grids[i - 1][j] : grids[i][j];
+			Grid* n_down = (i < grids.size()-1) ? grids[i + 1][j] : grids[i][j];
+			Grid* n_right = (j < grids[0].size() - 1) ? grids[i][j + 1] : grids[i][j];
+			Grid* n_left = (j > 0) ? grids[i][j - 1] : grids[i][j];
+			grids[i][j]->setNeighboringGrid(n_up, n_right, n_down, n_left);
 		}
 	}
 
@@ -73,14 +73,14 @@ void GridSystem::drawMesh()
 		{
 			if (i > 0 && j > 0)
 			{
-				grids[i - 1][j - 1].getTexture().chooseTexture();
-				glVertex(grids[i - 1][j - 1].getXYZ());
-				grids[i][j - 1].getTexture().chooseTexture();
-				glVertex(grids[i][j - 1].getXYZ());
-				grids[i][j].getTexture().chooseTexture();
-				glVertex(grids[i][j].getXYZ());
-				grids[i - 1][j].getTexture().chooseTexture();
-				glVertex(grids[i - 1][j].getXYZ());
+				grids[i - 1][j - 1]->getTexture().chooseTexture();
+				glVertex(grids[i - 1][j - 1]->getXYZ());
+				grids[i][j - 1]->getTexture().chooseTexture();
+				glVertex(grids[i][j - 1]->getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i - 1][j]->getTexture().chooseTexture();
+				glVertex(grids[i - 1][j]->getXYZ());
 			}
 		}
 	}
@@ -137,21 +137,21 @@ void GridSystem::drawMeshSkeleton(bool drawNormal = false){
 			//draw normal
 			if (drawNormal){
 				glColor3f(1.0f, 0.0f, 0.0f);
-				glVertex(grids[i][j].getXYZ());
-				glVertex(grids[i][j].getXYZ() + (0.2* grids[i][j].getNormal()));
+				glVertex(grids[i][j]->getXYZ());
+				glVertex(grids[i][j]->getXYZ() + (0.2* grids[i][j]->getNormal()));
 			}
 			//draw mesh lines
 			if (i > 0){
-				grids[i][j].getTexture().chooseTexture();
-				glVertex(grids[i][j].getXYZ());
-				grids[i - 1][j].getTexture().chooseTexture();
-				glVertex(grids[i - 1][j].getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i - 1][j]->getTexture().chooseTexture();
+				glVertex(grids[i - 1][j]->getXYZ());
 			}
 			if (j > 0){
-				grids[i][j].getTexture().chooseTexture();
-				glVertex(grids[i][j].getXYZ());
-				grids[i][j - 1].getTexture().chooseTexture();
-				glVertex(grids[i][j - 1].getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i][j - 1]->getTexture().chooseTexture();
+				glVertex(grids[i][j - 1]->getXYZ());
 			}
 		}
 	}
@@ -159,7 +159,7 @@ void GridSystem::drawMeshSkeleton(bool drawNormal = false){
 }
 
 void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
-	int retij[2] = { 0, 0 };
+	int retij[2] = { -1, -1 };
 	float min_dist = FLT_MAX;
 
 	Vector3f ray = pc.getRay();
@@ -169,47 +169,23 @@ void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
-			Grid* g = &grids[i][j];
+			Grid* g = grids[i][j];
 			Vector3f pt = g->getXYZ();
 			Vector3f newray = pt - pc.getCameraLocation(); //ray from camera to pt
 			float dist = sqrt(pow(newray.x(), 2) + pow(newray.y(), 2) + pow(newray.z(), 2)); //dist from camera to pt
 			Vector3f extNewray = newray.normalized() * d;
 			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
 			
-			glBegin(GL_LINES);
-			float threshold = (d/30)*offset;
+			float threshold = (d/30)*offset; //30 is a constant used when offset is 0.9
 			if (abs(extPt.x() - p.x()) < threshold \
 				&& abs(extPt.y() - p.y()) < threshold \
-				&& abs(extPt.z() - p.z()) < threshold){ //DUMMY LOL
+				&& abs(extPt.z() - p.z()) < threshold){ //NO LONGER DUMMY LOL //IT WORKS
 				if (min_dist > dist){
 					min_dist = dist;
 					retij[0] = i; retij[1] = j;
-					//Vector3f vec = pc.GetCenter() - pc.getCameraLocation(); //vector from camera location to center
-					//glColor3f(0.0f, 1.0f, 0.0f);
-					//glVertex(pc.getCameraLocation() + vec / 3.0f);
-					//glVertex(pt);
-					//glColor3f(0.0f, 0.0f, 1.0f);
-					//glVertex(pc.getCameraLocation() + vec / 3.0f);
-					//glVertex(extPt);
-					//glColor3f(1.0f, 0.0f, 1.0f);
-					//glVertex(pc.getCameraLocation() + (vec / 3.0f));
-					//glVertex(p);
-					//glColor3f(1.0f, 1.0f, 1.0f);
-					//glVertex(pc.GetCenter());
-					//glVertex(Vector3f(0,0,0));
-					/*glVertex(Vector3f(0,0,0));
-					glVertex(pt);
-					glColor3f(0.0f, 0.0f, 1.0f);
-					glVertex(Vector3f(0, 0, 0));
-					glVertex(p);
-					cout << point.x() << " " << point.y() << " " << point.z() << " " << "|" \
-						<< pt.x() << " " << pt.y() << " " << pt.z() << " " << endl;
-					cout << p.x() << " " << p.y() << " " << p.z() << " " << "|" \
-						<< extPt.x() << " " << extPt.y() << " " << extPt.z() << " " << endl;*/
 				}
 			}
-			glVertex(Vector3f(0,0,0));
-			glEnd();
+
 		}
 	}
 
@@ -219,7 +195,12 @@ void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
 void GridSystem::setSelectedGrid(int i, int j){
 	selectedi = i;
 	selectedj = j;
-	if (i > 0 && j > 0){
+}
+void GridSystem::showSelectedGrid(){
+	if (selectedi >= 0 && selectedj >= 0){
+		grids[selectedi][selectedj]->show();
+	}
+	/*if (selectedi > 0 && selectedj > 0){
 		glBegin(GL_QUADS);
 		glColor3f(1.0f, 0.0f, 0.0f);
 		if (selectedi>0 && selectedj > 0){
@@ -229,45 +210,14 @@ void GridSystem::setSelectedGrid(int i, int j){
 			glVertex(grids[selectedi - 1][selectedj].getXYZ());
 		}
 		glEnd();
-	}
-	/*for (int i = 0; i < grids.size(); i++)
-	{
-		for (int j = 0; j < grids[0].size(); j++)
-		{
-			if (grids[i][j].getXYZ().x() == selectedGrid->getXYZ().x() \
-				&& grids[i][j].getXYZ().y() == selectedGrid->getXYZ().y() \
-				&& grids[i][j].getXYZ().z() == selectedGrid->getXYZ().z()){
-				this->selectedi = i;
-				this->selectedj = j;
-				glBegin(GL_QUADS);
-				glColor3f(1.0f, 0.0f, 0.0f);
-				if (selectedi>0 && selectedj > 0){
-					glVertex(grids[selectedi][selectedj].getXYZ());
-					glVertex(grids[selectedi][selectedj - 1].getXYZ());
-					glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
-					glVertex(grids[selectedi - 1][selectedj].getXYZ());
-				}
-				glEnd();
-			}
-		}
-	}*/
-}
-void GridSystem::showSelectedGrid(){
-	glBegin(GL_QUADS);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	if (selectedi>0 && selectedj > 0){
-		glVertex(grids[selectedi][selectedj].getXYZ());
-		glVertex(grids[selectedi][selectedj-1].getXYZ());
-		glVertex(grids[selectedi-1][selectedj-1].getXYZ());
-		glVertex(grids[selectedi-1][selectedj].getXYZ());
-	}
-	glEnd();
-	/*if (this->selectedGrid->getNoiseVal() > 0){
-		this->selectedGrid->show();
 	}*/
 }
 Grid* GridSystem::getSelectedGrid(){
-	return &grids[selectedi][selectedj];
+	if (selectedi < 0 && selectedj < 0){
+		Grid* dummy = &Grid();
+		return dummy;
+	}
+	return grids[selectedi][selectedj];
 }
 
 

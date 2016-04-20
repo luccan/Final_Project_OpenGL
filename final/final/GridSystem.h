@@ -25,7 +25,7 @@ public:
 	Grid* getSelectedGrid();
 	void drawMeshSkeleton(bool drawNormal);
 private:
-	vector<vector<Grid>> grids; //grids[x][y]
+	vector<vector<Grid*>> grids; //grids[x][y]
 	Perlin p;
 	int w;
 	int h;
