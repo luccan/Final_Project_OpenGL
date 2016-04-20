@@ -111,9 +111,11 @@ namespace
 			break;
 		case ' ':
 		{
-			Matrix4f eye = Matrix4f::identity();
+			viewMode = 0;
+			Matrix4f eye = Matrix4f::identity().rotateX((M_PI / 4.0));
 			camera.SetRotation(eye);
-			camera.SetCenter(Vector3f(0, 0, 0));
+			camera.SetDistance(10);
+			camera.SetCenter(Vector3f(5, 0, 5));
 			break;
 		}
 		
@@ -134,17 +136,10 @@ namespace
 
 		case 'v':
 		case 'V':
-			viewMode = (viewMode + 1) % 2;
-			if (viewMode == 0){ //edit mode
-				camera.SetDistance(10);
-				camera.SetCenter(Vector3f(0,0,0));
-				camera.SetRotation(Matrix4f::identity());
-			}
-			else if (viewMode == 1){ //walk mode
-				camera.SetDistance(2);
-				camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
-				camera.SetRotation(Matrix4f::identity());
-			}
+			viewMode = 1;
+			camera.SetDistance(2);
+			camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
+			camera.SetRotation(Matrix4f::identity());
 			break;
 
 		case 'r':
@@ -256,7 +251,7 @@ namespace
 	// Called when mouse is moved while button pressed.
 	void motionFunc(int x, int y)
 	{
-		camera.MouseDrag(x, y);
+		camera.MouseDrag(x, y, viewMode == 0 ? true : false);
 
 		glutPostRedisplay();
 	}
@@ -555,6 +550,10 @@ namespace
 		
 		camera.drawRay();
 
+		if (viewMode == 1){ //roaming
+			terrain.getGridSystem()->forceGroundedView(camera, 0.25f);
+		}
+
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
 		if (gMousePressed)
@@ -708,10 +707,13 @@ int main(int argc, char* argv[])
 
 	camera.SetDimensions(600, 600);
 
+	Matrix4f eye = Matrix4f::identity().rotateX((M_PI / 4.0));
+	camera.SetRotation(eye);
 	camera.SetDistance(10);
+	camera.SetCenter(Vector3f(5, 0, 5));
 
 
-	glutCreateWindow("Carry Win Go");
+	glutCreateWindow("Graphics and Viz Final");
 
 	// Initialize OpenGL parameters.
 	initRendering();

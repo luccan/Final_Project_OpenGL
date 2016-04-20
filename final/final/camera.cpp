@@ -75,12 +75,12 @@ void Camera::MouseClick(Button button, int x, int y)
     }
 }
 
-void Camera::MouseDrag(int x, int y)
+void Camera::MouseDrag(int x, int y, bool AllowZ = true)
 {
     switch (mButtonState)
     {
     case LEFT:
-        ArcBallRotation(x,y);
+        ArcBallRotation(x,y, AllowZ);
         break;
     case MIDDLE:
         PlaneTranslation(x,y);
@@ -104,7 +104,7 @@ void Camera::MouseRelease(int x, int y)
 }
 
 
-void Camera::ArcBallRotation(int x, int y)
+void Camera::ArcBallRotation(int x, int y, bool AllowZ = true)
 {
     float sx, sy, sz, ex, ey, ez;
     float scale;
@@ -151,8 +151,9 @@ void Camera::ArcBallRotation(int x, int y)
     }
     
     // project up to unit sphere - find Z coordinate
-    sz = sqrt(1.0f - sl * sl);
-    ez = sqrt(1.0f - el * el);
+	sz = sqrt(1.0f - sl * sl);
+	ez = sqrt(1.0f - el * el);
+
     
     // rotate (sx,sy,sz) into (ex,ey,ez)
     
@@ -163,6 +164,9 @@ void Camera::ArcBallRotation(int x, int y)
     if( dotprod != 1 )
     {
         Vector3f axis( sy * ez - ey * sz, sz * ex - ez * sx, sx * ey - ex * sy );
+		if (!AllowZ){
+			axis = Vector3f(0 , sz * ex - ez * sx, 0);
+		}
         axis.normalize();
         
         float angle = 2.0f * acos( dotprod );

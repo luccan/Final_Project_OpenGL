@@ -25,12 +25,12 @@ void Grid::assignNoise(float val)
 {
 	this->noiseval = val;
 	this->xyz.y() = val;
-	if (val > 1.5f)
+	if (val > 2.0f)
 	{
 		this->texture = Texture(Texture::MOUNTAIN);
 		this->mat = Material(Material::MOUNTAIN);
 	}
-	else if (val >= 1.5f && val <= 2.0f)
+	else if (val > 1.8f)
 	{
 		this->texture = Texture(Texture::MUD);
 		this->mat = Material(Material::MUD);
@@ -45,6 +45,10 @@ void Grid::assignNoise(float val)
 		this->texture = Texture(Texture::GRASS);
 		this->mat = Material(Material::GRASS);
 		float h = 10.0f;
+	}
+	else {
+		this->texture = Texture(Texture::BLACK);
+		this->mat = Material(Material::BLACK);
 	}
 
 }

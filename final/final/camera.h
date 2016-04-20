@@ -29,7 +29,7 @@ public:
 
     // Call from whatever UI toolkit
     void MouseClick(Button button, int x, int y);
-    void MouseDrag(int x, int y);
+    void MouseDrag(int x, int y, bool AllowZ);
     void MouseRelease(int x, int y);
 
     // Apply viewport, perspective, and modeling
@@ -70,7 +70,7 @@ protected:
     float   mCurrentDistance;
 
 private:
-    void ArcBallRotation(int x, int y);
+	void ArcBallRotation(int x, int y, bool AllowZ);
     void PlaneTranslation(int x, int y);
     void DistanceZoom(int x, int y);
 };

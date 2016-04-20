@@ -33,7 +33,7 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 		{
 			Grid* g = new Grid(i, 0.0f, j);
 			float val = p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3;
-			g->assignNoise(p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
+			g->assignNoise(val);
 			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave));
@@ -224,18 +224,55 @@ Grid* GridSystem::getSelectedGrid(){
 }
 
 
-Matrix4f GridSystem::getIdealViewMatrix(PerspectiveCamera pc){
+void GridSystem::forceGroundedView(PerspectiveCamera &pc, float lookAtDistance) {
 	Vector3f p = pc.getCameraLocation();
-	for (int i = 0; i < grids.size(); i++)
-	{
-		for (int j = 0; j < grids[0].size(); j++)
-		{
-			
-		}
+	Vector3f vec = pc.GetCenter() - p;
+	Vector3f lookAt = p + ((offset/2) * vec.normalized()); //from camera to lookAt direction
+
+	Vector3f p_ground = Vector3f(p.x(), getYLevel(p.x(), p.z()), p.z());
+	Vector3f lookAt_ground = Vector3f(lookAt.x(), getYLevel(lookAt.x(), lookAt.z()), lookAt.z());
+
+	//force distance to be at ground
+	if (pc.GetCenter().y() < lookAt_ground.y()){
+		pc.SetCenter(lookAt_ground); //apply new camera center
 	}
-	return Matrix4f::identity();
+	else if (pc.GetCenter().y() > lookAt_ground.y() + 0.7) {
+		pc.SetCenter(lookAt_ground + Vector3f(0, 0.7, 0));
+	}
+
+	Vector3f nvec = (lookAt_ground - p_ground); //new camera location to new camera center (alrd applied)
+	float lookAt_distance = sqrt(pow(nvec.x(), 2) + pow(nvec.y(), 2) + pow(nvec.z(), 2));
+	//float lookAt_distance = lookAtDistance;
+	pc.SetDistance(lookAt_distance);
+
+	////set view to correct Z axis
+	//pc.SetCenter(lookAt_ground); //apply new camera center
+	//Vector3f nvec = (lookAt_ground - p_ground); //new camera location to new camera center (alrd applied)
+	////float lookAt_distance = sqrt(pow(nvec.x(), 2) + pow(nvec.y(), 2) + pow(nvec.z(), 2));
+	//float lookAt_distance = lookAtDistance;
+	//pc.SetDistance(lookAt_distance);
+
+	cout << "p:" << p_ground.x() << " " << p_ground.y() << " " << p_ground.z() << endl;
+	cout << "lookAt:" << lookAt_ground.x() << " " << lookAt_ground.y() << " " << lookAt_ground.z() << endl;
+	//cout << "test:" << test.x() << " " << test.y() << " " << test.z() << endl;
+	//cout << p.x() << " " << p.z() << " " << getYLevel(0.758, 0.875) << endl;
 }
 
+float GridSystem::getYLevel(float x, float z){
+	if (x < 0+2*offset || x > w-offset || z < 0+2*offset || z > h-offset){
+		return -1;
+	}
+	float up = grids[(int)floor(x / offset)][(int)floor(z / offset)]->getXYZ().y();
+	float right = grids[(int)ceil(x / offset)][(int)floor(z / offset)]->getXYZ().y();
+	float down = grids[(int)ceil(x / offset)][(int)ceil(z / offset)]->getXYZ().y();
+	float left = grids[(int)floor(x / offset)][(int)ceil(z / offset)]->getXYZ().y();
+	//localPt([0-1],[0-1])
+	Vector2f localPt = Vector2f(fmod(x, offset)/offset, fmod(z, offset)/offset);
+	float uprighty = up + (0.5* (right-up) * localPt[0]); //y at (localPt[0],0)
+	float leftdowny = left + (0.5 * (down-left) * localPt[0]); //y at (localPt[0],1)
+	float y = uprighty + (0.5 * (leftdowny - uprighty) * localPt[1]);
+	return y;
+}
 
 
 

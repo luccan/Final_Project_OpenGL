@@ -34,7 +34,7 @@ Texture::TYPE Texture::getTexture(){
 void Texture::chooseTexture()
 {
 	if (rgb.x() == 0){
-		cout << "asdf";
+		//cout << "asdf";
 	}
 	glColor3f(rgb.x(), rgb.y(), rgb.z());
 }

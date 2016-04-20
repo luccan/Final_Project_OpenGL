@@ -25,7 +25,8 @@ public:
 	Grid* getSelectedGrid();
 	void drawMeshSkeleton(bool drawNormal);
 
-	Matrix4f getIdealViewMatrix(PerspectiveCamera pc);
+	void forceGroundedView(PerspectiveCamera &pc, float lookAtDistance);
+	float getYLevel(float x, float y);
 private:
 	vector<vector<Grid*>> grids; //grids[x][y]
 	Perlin p;
