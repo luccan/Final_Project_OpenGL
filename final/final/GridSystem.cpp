@@ -1,6 +1,7 @@
 #include "GridSystem.h"
 #ifdef __APPLE__
 #include "Vector3f.h"
+#include <float.h>
 #else
 #include <Vector3f.h>
 #endif
@@ -229,7 +230,7 @@ void GridSystem::showSelectedGrid(){
 }
 Grid* GridSystem::getSelectedGrid(){
 	if (selectedi < 0 && selectedj < 0){
-		Grid* dummy = &Grid();
+		Grid* dummy = new Grid();
 		return dummy;
 	}
 	return grids[selectedi][selectedj];

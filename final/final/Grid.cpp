@@ -103,6 +103,9 @@ void Grid::setTexture(Texture t)
 	if (this->valid){
 		this->texture = t;
 	}
+    else{
+        delete this;
+    }
 }
 Material Grid::getMaterial()
 {

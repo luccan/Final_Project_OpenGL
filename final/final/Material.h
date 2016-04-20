@@ -1,8 +1,12 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
-
+#ifdef __APPLE__
+#include "extra.h"
+#include <OpenGL/gl.h>
+#else
 #include <extra.h>
 #include <GL\GL.h>
+#endif
 
 class Material
 {
