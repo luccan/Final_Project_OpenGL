@@ -18,7 +18,6 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 	this->selectedi = -1; this->selectedj = -1;
 	this->w = w;
 	this->h = h;
-	this->offset = 0.1f;
 	this->offset = gridsize;
 	this->p = p;
 	float persistance = 0.2f;
@@ -188,7 +187,7 @@ void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
 			Vector3f extNewray = newray.normalized() * d;
 			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
 			
-			float threshold = (d/30)*offset; //30 is a constant used when offset is 0.9
+			float threshold = (exp(4-(dist/15.0f))/d)*1500.0f*offset; //exp(3) = 20. (quite efficient for dist 4-30)
 			if (abs(extPt.x() - p.x()) < threshold \
 				&& abs(extPt.y() - p.y()) < threshold \
 				&& abs(extPt.z() - p.z()) < threshold){ //NO LONGER DUMMY LOL //IT WORKS
@@ -215,17 +214,6 @@ void GridSystem::showSelectedGrid(){
 	if (selectedi >= 0 && selectedj >= 0){
 		grids[selectedi][selectedj]->show();
 	}
-	/*if (selectedi > 0 && selectedj > 0){
-		glBegin(GL_QUADS);
-		glColor3f(1.0f, 0.0f, 0.0f);
-		if (selectedi>0 && selectedj > 0){
-			glVertex(grids[selectedi][selectedj].getXYZ());
-			glVertex(grids[selectedi][selectedj - 1].getXYZ());
-			glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
-			glVertex(grids[selectedi - 1][selectedj].getXYZ());
-		}
-		glEnd();
-	}*/
 }
 Grid* GridSystem::getSelectedGrid(){
 	if (selectedi < 0 && selectedj < 0){
