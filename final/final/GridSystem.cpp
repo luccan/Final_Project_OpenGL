@@ -6,13 +6,14 @@
 #endif
 #include "extra.h"
 #include <iostream>
+#include "PerlinNoise.h"
 
 GridSystem::GridSystem()
 {
-	GridSystem(10, 10, Perlin());
+	GridSystem(10, 10, PerlinNoise());
 }
 
-GridSystem::GridSystem(int w, int h, Perlin p)
+GridSystem::GridSystem(int w, int h, PerlinNoise p)
 {
 	this->selectedGrid = &Grid();
 	this->selectedi = 0; this->selectedj = 0;

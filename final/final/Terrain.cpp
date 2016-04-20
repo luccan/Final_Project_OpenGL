@@ -5,7 +5,7 @@ Terrain::Terrain()
 {
 }
 
-Terrain::Terrain(Perlin& p, int w, int h)
+Terrain::Terrain(PerlinNoise& p, int w, int h)
 {
 	this->w = w;
 	this->h = h;

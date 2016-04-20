@@ -8,7 +8,7 @@
 #endif
 #include <vector>
 #include "Grid.h"
-#include "Perlin.h"
+#include "PerlinNoise.h"
 #include "PerspectiveCamera.h"
 
 using namespace std;
@@ -17,7 +17,7 @@ class GridSystem
 {
 public:
 	GridSystem();
-	GridSystem(int w, int h, Perlin p);
+	GridSystem(int w, int h, PerlinNoise p);
 	void drawMesh();
 	Grid* getLastClickedGrid(PerspectiveCamera pc);
 	void setSelectedGrid(Grid* g);
