@@ -24,6 +24,8 @@ public:
 	void showSelectedGrid();
 	Grid* getSelectedGrid();
 	void drawMeshSkeleton(bool drawNormal);
+
+	Matrix4f getIdealViewMatrix(PerspectiveCamera pc);
 private:
 	vector<vector<Grid*>> grids; //grids[x][y]
 	Perlin p;

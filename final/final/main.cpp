@@ -80,6 +80,7 @@ namespace
 	Terrain terrain;
 	char terrainMode = 0; //0 for mesh, 1 for wireframe
 	char textureMode = 0; //0 for mesh, 1 for wireframe
+	char viewMode = 0; //0 for edit, 1 for walkaround
 
 	// Declarations of functions whose implementations occur later.
 	void arcballRotation(int endX, int endY);
@@ -102,7 +103,7 @@ namespace
         cameraRight = Vector3f::cross(up, cameraDir).normalized();
         cameraUp = Vector3f::cross(cameraDir, cameraRight).normalized();
         cameraSpeed = 0.05f;
-        cameraFront = camera.GetCenter()-camera.getCameraLocation();
+        cameraFront = (camera.GetCenter()-camera.getCameraLocation()).normalized();
 		switch (key)
 		{
 		case 27: // Escape key
@@ -129,6 +130,21 @@ namespace
 		case 't':
 		case 'T':
 			terrainMode = (terrainMode + 1) % 3;
+			break;
+
+		case 'v':
+		case 'V':
+			viewMode = (viewMode + 1) % 2;
+			if (viewMode == 0){ //edit mode
+				camera.SetDistance(10);
+				camera.SetCenter(Vector3f(0,0,0));
+				camera.SetRotation(Matrix4f::identity());
+			}
+			else if (viewMode == 1){ //walk mode
+				camera.SetDistance(2);
+				camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
+				camera.SetRotation(Matrix4f::identity());
+			}
 			break;
 
 		case 'r':

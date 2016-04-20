@@ -33,7 +33,6 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 		{
 			Grid* g = new Grid(i, 0.0f, j);
 			float val = p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3;
-			cout << val << endl;
 			g->assignNoise(p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
 			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
@@ -225,7 +224,17 @@ Grid* GridSystem::getSelectedGrid(){
 }
 
 
-
+Matrix4f GridSystem::getIdealViewMatrix(PerspectiveCamera pc){
+	Vector3f p = pc.getCameraLocation();
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			
+		}
+	}
+	return Matrix4f::identity();
+}
 
 
 
