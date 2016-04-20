@@ -36,14 +36,14 @@ Perlin::Perlin()
 	};
 }
 
-float Perlin::octave_noise(float x, float y, float z, float persistence, float amplitude, float octave)
+float Perlin::Noise(float x, float y, float z, float persistence, float amplitude, float octave)
 {
 	float total = 0;
 	float frequency = 1;
 	float maxValue = 0;			// Used for normalizing result to 0.0 - 1.0
 	for (int i = 0; i < octave; i++)
 	{
-		total += noise(x * frequency, y * frequency, z * frequency) * amplitude;
+		total += Noise(x * frequency, y * frequency, z * frequency) * amplitude;
 
 		maxValue += amplitude;
 
@@ -54,7 +54,7 @@ float Perlin::octave_noise(float x, float y, float z, float persistence, float a
 	return total / maxValue;
 }
 
-float Perlin::noise(float x, float y, float z)
+float Perlin::Noise(float x, float y, float z)
 {
 	int xi = (int)x & 255;
 	int yi = (int)y & 255;

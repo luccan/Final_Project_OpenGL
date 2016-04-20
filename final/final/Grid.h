@@ -4,6 +4,7 @@
 #include <vector>
 #include "Vector3f.h"
 #include "Texture.h"
+#include "Material.h"
 
 using namespace std;
 
@@ -21,6 +22,9 @@ public:
 	Vector3f getNormal();
 	Texture getTexture();
 	void setTexture(Texture t);
+
+	Material getMaterial();
+	void setMaterial(Material m);
 	void show();
 private:
 	Vector3f xyz;
@@ -28,5 +32,6 @@ private:
 	Texture texture;
 	Grid* neighbors[4]; //0 is up, 1 right, 2 btm, 3 left : if no neighbor, this will contain itself.
 	Vector3f normal;
+	Material mat;
 };
 #endif // !GRID_H

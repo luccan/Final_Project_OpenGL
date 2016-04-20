@@ -9,8 +9,8 @@ class Perlin
 {
 public:
 	Perlin();
-	float octave_noise(float x, float y, float z, float persistence, float amplitude, float octave);
-	float noise(float x, float y, float z);
+	float Noise(float x, float y, float z, float persistence, float amplitude, float octave);
+	float Noise(float x, float y, float z);
 private:
 	int inc(int num);
 	float grad(int hash, float x, float y, float z);

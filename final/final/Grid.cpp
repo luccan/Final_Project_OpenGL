@@ -22,24 +22,32 @@ void Grid::assignNoise(float val)
 {
 	this->noiseval = val;
 	this->xyz.y() = val;
-	if (val > 1.9f){
+	if (val > 1.5f)
+	{
 		this->texture = Texture(Texture::MOUNTAIN);
+		this->mat = Material(Material::MOUNTAIN);
 	}
-	else if (val < 1.0f){
+	else if (val >= 1.5f && val <= 2.0f)
+	{
 		this->texture = Texture(Texture::MUD);
+		this->mat = Material(Material::MUD);
 	}
-	else {
-		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		if (r > 0.5){
-			this->texture = Texture(Texture::MUD);
-		}
-		else {
-			this->texture = Texture(Texture::GRASS);
-		}
+	else if (val >= 0.5f && val <= 1.5f)
+	{
+		//float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			/*this->texture = Texture(Texture::MUD);
+			this->mat = Material(Material::MUD);*/
+
+
+		this->texture = Texture(Texture::GRASS);
+		this->mat = Material(Material::GRASS);
+		float h = 10.0f;
 	}
+
 }
 
-void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_left){
+void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_left)
+{
 	this->neighbors[0] = &n_up;
 	this->neighbors[1] = &n_right;
 	this->neighbors[2] = &n_down;
@@ -51,15 +59,23 @@ void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_l
 	this->normal.normalize();
 }
 
-void Grid::naturalizeGrid(){
+void Grid::naturalizeGrid()
+{
 	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	if (r < 0.2){
+	if (r < 0.2)
+	{
 		this->texture = Texture(this->neighbors[0]->getTexture().getTexture());
-	} else if (r < 0.4){
+	}
+	else if (r < 0.4)
+	{
 		this->texture = Texture(this->neighbors[1]->getTexture().getTexture());
-	} else if (r < 0.6){
+	}
+	else if (r < 0.6)
+	{
 		this->texture = Texture(this->neighbors[2]->getTexture().getTexture());
-	} else if (r < 0.8){
+	}
+	else if (r < 0.8)
+	{
 		this->texture = Texture(this->neighbors[3]->getTexture().getTexture());
 	}
 }
@@ -84,7 +100,18 @@ void Grid::setTexture(Texture t)
 {
 	texture = t;
 }
-void Grid::show(){
+
+Material Grid::getMaterial()
+{
+	return this->mat;
+}
+void Grid::setMaterial(Material m)
+{
+	this->mat = m;
+	m.bindMat();
+}
+void Grid::show()
+{
 	glBegin(GL_QUADS);
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glVertex(this->neighbors[0]->getXYZ());

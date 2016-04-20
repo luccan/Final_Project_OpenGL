@@ -10,16 +10,16 @@
 
 GridSystem::GridSystem()
 {
-	GridSystem(10, 10, PerlinNoise());
+	GridSystem(10, 10, PerlinNoise(), 0.25f);
 }
 
-GridSystem::GridSystem(int w, int h, PerlinNoise p)
+GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 {
 	this->selectedGrid = &Grid();
 	this->selectedi = 0; this->selectedj = 0;
 	this->w = w;
 	this->h = h;
-	this->offset = 0.9f;
+	this->offset = gridsize;
 	this->p = p;
 	float persistance = 0.2f;
 	float amplitude = 1.0f;
@@ -32,7 +32,9 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 		for (float j = 0.0; j < h + (offset/2); j += offset)
 		{
 			Grid g = Grid(i, 0.0f, j);
-			g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
+			float val = p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3;
+			cout << val << endl;
+			g.assignNoise(p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
 			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave));
@@ -68,6 +70,10 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p)
 void GridSystem::drawMesh()
 {
 	glBegin(GL_QUADS);
+	GLfloat Lt1diff[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat Lt1pos[] = { 4.0, 4.0, 4.0, 1.0 };
+	glLightfv(GL_LIGHT0 + 1, GL_DIFFUSE, Lt1diff);
+	glLightfv(GL_LIGHT0 + 1, GL_POSITION, Lt1pos);
 	for (int i = 0; i < grids.size(); i++)
 	{
 		for (int j = 0; j < grids[0].size(); j++)
@@ -75,12 +81,16 @@ void GridSystem::drawMesh()
 			if (i > 0 && j > 0)
 			{
 				grids[i - 1][j - 1].getTexture().chooseTexture();
+				//grids[i - 1][j - 1].getMaterial().bindMat();
 				glVertex(grids[i - 1][j - 1].getXYZ());
 				grids[i][j - 1].getTexture().chooseTexture();
+				//grids[i][j - 1].getMaterial().bindMat();
 				glVertex(grids[i][j - 1].getXYZ());
 				grids[i][j].getTexture().chooseTexture();
+				//grids[i][j].getMaterial().bindMat();
 				glVertex(grids[i][j].getXYZ());
 				grids[i - 1][j].getTexture().chooseTexture();
+				//grids[i - 1][j].getMaterial().bindMat();
 				glVertex(grids[i - 1][j].getXYZ());
 			}
 		}

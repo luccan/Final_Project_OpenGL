@@ -17,7 +17,7 @@ class GridSystem
 {
 public:
 	GridSystem();
-	GridSystem(int w, int h, PerlinNoise p);
+	GridSystem(int w, int h, PerlinNoise p, float gridsize);
 	void drawMesh();
 	Grid* getLastClickedGrid(PerspectiveCamera pc);
 	void setSelectedGrid(Grid* g);
