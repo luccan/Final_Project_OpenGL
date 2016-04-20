@@ -195,14 +195,14 @@ void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
 				if (min_dist > dist){
 					min_dist = dist;
 					retij[0] = i; retij[1] = j;
-					g->show();
-					cout << "min_dist: " << min_dist << endl;
+					//g->show();
+					//cout << "min_dist: " << min_dist << endl;
 				}
 			}
 
 		}
 	}
-	cout << "-------------" << endl;
+	//cout << "-------------" << endl;
 
 	reti = retij[0];
 	retj = retij[1];
