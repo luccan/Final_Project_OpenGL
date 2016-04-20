@@ -140,18 +140,18 @@ namespace
 		case 'E':
 			switch (textureMode){
 			case 1:
-				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::MUD));
+				terrain.getGridSystem().getSelectedGrid()->setTexture(Texture(Texture::MUD));
 				break;
 			case 2:
-				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::GRASS));
+				terrain.getGridSystem().getSelectedGrid()->setTexture(Texture(Texture::GRASS));
 				break;
 			case 3:
-				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::MOUNTAIN));
+				terrain.getGridSystem().getSelectedGrid()->setTexture(Texture(Texture::MOUNTAIN));
 				break;
 			default: //case 0
-				Grid* g = terrain.getGridSystem().getLastClickedGrid(camera);
+				Grid* g = terrain.getGridSystem().getSelectedGrid();
 				g->setTexture(Texture(Texture::BLACK));
-				//Grid* g2 = terrain.getGridSystem().getLastClickedGrid(camera);
+				//Grid* g2 = terrain.getGridSystem().getSelectedGrid();
 				cout << "changed" << endl;
 				break;
 			}
@@ -530,11 +530,12 @@ namespace
 		else {
 			terrain.getGridSystem().drawMeshSkeleton(true);
 		}
-		Grid* g = terrain.getGridSystem().getLastClickedGrid(camera);
+		int ij[2];
+		terrain.getGridSystem().getLastClickedGrid(camera, ij[0], ij[1]);
 		/*if (g.getNoiseVal() > 0){
 			g.show();
 		}*/
-		terrain.getGridSystem().setSelectedGrid(g);
+		terrain.getGridSystem().setSelectedGrid(ij[0], ij[1]);
 		terrain.getGridSystem().showSelectedGrid();
 		
 		camera.drawRay();

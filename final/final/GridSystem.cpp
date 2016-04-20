@@ -14,7 +14,6 @@ GridSystem::GridSystem()
 
 GridSystem::GridSystem(int w, int h, Perlin p)
 {
-	this->selectedGrid = &Grid();
 	this->selectedi = 0; this->selectedj = 0;
 	this->w = w;
 	this->h = h;
@@ -158,8 +157,8 @@ void GridSystem::drawMeshSkeleton(bool drawNormal = false){
 	glEnd();
 }
 
-Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
-	Grid* ret = new Grid();
+void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
+	int retij[2] = { 0, 0 };
 	float min_dist = FLT_MAX;
 
 	Vector3f ray = pc.getRay();
@@ -177,19 +176,35 @@ Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
 			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
 			
 			glBegin(GL_LINES);
-			glColor3f(0.0f, 1.0f, 0.0f);
-			float threshold = (d/180)*offset;
+			float threshold = (d/30)*offset;
 			if (abs(extPt.x() - p.x()) < threshold \
 				&& abs(extPt.y() - p.y()) < threshold \
 				&& abs(extPt.z() - p.z()) < threshold){ //DUMMY LOL
 				if (min_dist > dist){
 					min_dist = dist;
-					ret = g;
-					Vector3f point = pc.getCameraLocation() + newray / 3.0f;
-					glVertex(point);
+					retij[0] = i; retij[1] = j;
+					//Vector3f vec = pc.GetCenter() - pc.getCameraLocation(); //vector from camera location to center
+					//glColor3f(0.0f, 1.0f, 0.0f);
+					//glVertex(pc.getCameraLocation() + vec / 3.0f);
+					//glVertex(pt);
+					//glColor3f(0.0f, 0.0f, 1.0f);
+					//glVertex(pc.getCameraLocation() + vec / 3.0f);
+					//glVertex(extPt);
+					//glColor3f(1.0f, 0.0f, 1.0f);
+					//glVertex(pc.getCameraLocation() + (vec / 3.0f));
+					//glVertex(p);
+					//glColor3f(1.0f, 1.0f, 1.0f);
+					//glVertex(pc.GetCenter());
+					//glVertex(Vector3f(0,0,0));
+					/*glVertex(Vector3f(0,0,0));
 					glVertex(pt);
-					cout << point.x() << " " << point.y() << " " << point.z() << " " << endl;
-					cout << pt.x() << " " << pt.y() << " " << pt.z() << " " << endl;
+					glColor3f(0.0f, 0.0f, 1.0f);
+					glVertex(Vector3f(0, 0, 0));
+					glVertex(p);
+					cout << point.x() << " " << point.y() << " " << point.z() << " " << "|" \
+						<< pt.x() << " " << pt.y() << " " << pt.z() << " " << endl;
+					cout << p.x() << " " << p.y() << " " << p.z() << " " << "|" \
+						<< extPt.x() << " " << extPt.y() << " " << extPt.z() << " " << endl;*/
 				}
 			}
 			glVertex(Vector3f(0,0,0));
@@ -197,11 +212,24 @@ Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
 		}
 	}
 
-	return ret;
+	reti = retij[0];
+	retj = retij[1];
 }
-void GridSystem::setSelectedGrid(Grid* g){
-	selectedGrid = g;
-	for (int i = 0; i < grids.size(); i++)
+void GridSystem::setSelectedGrid(int i, int j){
+	selectedi = i;
+	selectedj = j;
+	if (i > 0 && j > 0){
+		glBegin(GL_QUADS);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		if (selectedi>0 && selectedj > 0){
+			glVertex(grids[selectedi][selectedj].getXYZ());
+			glVertex(grids[selectedi][selectedj - 1].getXYZ());
+			glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
+			glVertex(grids[selectedi - 1][selectedj].getXYZ());
+		}
+		glEnd();
+	}
+	/*for (int i = 0; i < grids.size(); i++)
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
@@ -221,7 +249,7 @@ void GridSystem::setSelectedGrid(Grid* g){
 				glEnd();
 			}
 		}
-	}
+	}*/
 }
 void GridSystem::showSelectedGrid(){
 	glBegin(GL_QUADS);
@@ -237,7 +265,9 @@ void GridSystem::showSelectedGrid(){
 		this->selectedGrid->show();
 	}*/
 }
-
+Grid* GridSystem::getSelectedGrid(){
+	return &grids[selectedi][selectedj];
+}
 
 
 
