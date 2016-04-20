@@ -18,6 +18,24 @@ class PerlinNoise: public Perlin
 {
 public:
 
+	float octaveNoise(float x, float y, float z, float persistence, float amplitude, float octave)
+	{
+		float total = 0;
+		float frequency = 1;
+		float maxValue = 0;			// Used for normalizing result to 0.0 - 1.0
+		for (int i = 0; i < octave; i++)
+		{
+			total += noise(x * frequency, y * frequency, z * frequency) * amplitude;
+
+			maxValue += amplitude;
+
+			amplitude *= persistence;
+			frequency *= 2;
+		}
+
+		return total / maxValue;
+	}
+
     static double noise( double x, double y, double z )
     {
         int X = (int)floor(x) & 255;                  // FIND UNIT CUBE THAT
