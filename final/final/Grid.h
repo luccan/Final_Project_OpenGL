@@ -18,11 +18,15 @@ public:
 	void naturalizeGrid(); //influences the texture of a grid based on its surrounding grids
 	float getNoiseVal();
 	Vector3f getXYZ();
+	Vector3f getNormal();
 	Texture getTexture();
+	void setTexture(Texture t);
+	void show();
 private:
 	Vector3f xyz;
 	float noiseval;
 	Texture texture;
 	Grid* neighbors[4]; //0 is up, 1 right, 2 btm, 3 left : if no neighbor, this will contain itself.
+	Vector3f normal;
 };
 #endif // !GRID_H

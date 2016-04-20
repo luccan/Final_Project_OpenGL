@@ -1,6 +1,7 @@
 #include "Grid.h"
 #include "Terrain.h"
 #include <iostream>
+#include "extra.h"
 
 Grid::Grid()
 {
@@ -43,6 +44,11 @@ void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_l
 	this->neighbors[1] = &n_right;
 	this->neighbors[2] = &n_down;
 	this->neighbors[3] = &n_left;
+	this->normal = Vector3f::cross(this->neighbors[0]->getXYZ(), this->neighbors[1]->getXYZ()) \
+		+ Vector3f::cross(this->neighbors[1]->getXYZ(), this->neighbors[2]->getXYZ()) \
+		+ Vector3f::cross(this->neighbors[2]->getXYZ(), this->neighbors[3]->getXYZ()) \
+		+ Vector3f::cross(this->neighbors[3]->getXYZ(), this->neighbors[0]->getXYZ());
+	this->normal.normalize();
 }
 
 void Grid::naturalizeGrid(){
@@ -66,7 +72,25 @@ Vector3f Grid::getXYZ()
 {
 	return this->xyz;
 }
+Vector3f Grid::getNormal()
+{
+	return this->normal;
+}
 Texture Grid::getTexture()
 {
-	return this->texture;
+	return texture;
+}
+void Grid::setTexture(Texture t)
+{
+	texture = t;
+}
+void Grid::show(){
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex(this->neighbors[0]->getXYZ());
+	glVertex(this->neighbors[1]->getXYZ());
+	glVertex(this->neighbors[2]->getXYZ());
+	glVertex(this->neighbors[3]->getXYZ());
+	cout << this->neighbors[0]->getXYZ().x() << " " << this->neighbors[0]->getXYZ().y() << " " << this->neighbors[0]->getXYZ().z() << " " << endl;
+	glEnd();
 }

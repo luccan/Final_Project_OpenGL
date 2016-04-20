@@ -14,7 +14,7 @@ Terrain::Terrain(Perlin& p, int w, int h)
 
 GridSystem Terrain::getGridSystem()
 {
-	return this->gs;
+	return gs;
 }
 void Terrain::SetGridSystem(GridSystem &gs)
 {

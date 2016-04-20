@@ -14,9 +14,11 @@ GridSystem::GridSystem()
 
 GridSystem::GridSystem(int w, int h, Perlin p)
 {
+	this->selectedGrid = &Grid();
+	this->selectedi = 0; this->selectedj = 0;
 	this->w = w;
 	this->h = h;
-	float offset = 0.1f;
+	float offset = 0.9f;
 	this->p = p;
 	float persistance = 0.2f;
 	float amplitude = 1.0f;
@@ -126,12 +128,19 @@ void GridSystem::drawMesh()
 	glEnd();
 }
 
-void GridSystem::drawMeshSkeleton(){
+void GridSystem::drawMeshSkeleton(bool drawNormal = false){
 	glBegin(GL_LINES);
 	for (int i = 0; i < grids.size(); i++)
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
+			//draw normal
+			if (drawNormal){
+				glColor3f(1.0f, 0.0f, 0.0f);
+				glVertex(grids[i][j].getXYZ());
+				glVertex(grids[i][j].getXYZ() + (0.2* grids[i][j].getNormal()));
+			}
+			//draw mesh lines
 			if (i > 0){
 				grids[i][j].getTexture().chooseTexture();
 				glVertex(grids[i][j].getXYZ());
@@ -149,7 +158,73 @@ void GridSystem::drawMeshSkeleton(){
 	glEnd();
 }
 
+Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
+	Grid* ret = new Grid();
+	float min_dist = FLT_MAX;
 
+	Vector3f ray = pc.getRay();
+	float d = sqrt(pow(ray.x(), 2) + pow(ray.y(), 2) + pow(ray.z(), 2)); //dist from ray to projection pt
+	Vector3f p = pc.getCameraLocation() + ray;
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			Grid* g = &grids[i][j];
+			Vector3f pt = g->getXYZ();
+			Vector3f newray = pt - pc.getCameraLocation(); //ray from camera to pt
+			float dist = sqrt(pow(newray.x(), 2) + pow(newray.y(), 2) + pow(newray.z(), 2)); //dist from camera to pt
+			Vector3f extNewray = newray.normalized() * d;
+			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
+			float threshold = 2.0f;
+			if (abs(extPt.x() - p.x()) < threshold && abs(extPt.y() - p.y()) && abs(extPt.y() - p.y())){ //DUMMY LOL
+				if (min_dist > dist){
+					min_dist = dist;
+					ret = g;
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+void GridSystem::setSelectedGrid(Grid* g){
+	selectedGrid = g;
+	for (int i = 0; i < grids.size(); i++)
+	{
+		for (int j = 0; j < grids[0].size(); j++)
+		{
+			if (grids[i][j].getXYZ().x() == selectedGrid->getXYZ().x() \
+				&& grids[i][j].getXYZ().y() == selectedGrid->getXYZ().y() \
+				&& grids[i][j].getXYZ().z() == selectedGrid->getXYZ().z()){
+				this->selectedi = i;
+				this->selectedj = j;
+				glBegin(GL_QUADS);
+				glColor3f(1.0f, 0.0f, 0.0f);
+				if (selectedi>0 && selectedj > 0){
+					glVertex(grids[selectedi][selectedj].getXYZ());
+					glVertex(grids[selectedi][selectedj - 1].getXYZ());
+					glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
+					glVertex(grids[selectedi - 1][selectedj].getXYZ());
+				}
+				glEnd();
+			}
+		}
+	}
+}
+void GridSystem::showSelectedGrid(){
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	if (selectedi>0 && selectedj > 0){
+		glVertex(grids[selectedi][selectedj].getXYZ());
+		glVertex(grids[selectedi][selectedj-1].getXYZ());
+		glVertex(grids[selectedi-1][selectedj-1].getXYZ());
+		glVertex(grids[selectedi-1][selectedj].getXYZ());
+	}
+	glEnd();
+	/*if (this->selectedGrid->getNoiseVal() > 0){
+		this->selectedGrid->show();
+	}*/
+}
 
 
 

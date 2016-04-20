@@ -79,6 +79,7 @@ namespace
 
 	Terrain terrain;
 	char terrainMode = 0; //0 for mesh, 1 for wireframe
+	char textureMode = 0; //0 for mesh, 1 for wireframe
 
 	// Declarations of functions whose implementations occur later.
 	void arcballRotation(int endX, int endY);
@@ -127,7 +128,33 @@ namespace
 
 		case 't':
 		case 'T':
-			terrainMode = (terrainMode + 1) % 2;
+			terrainMode = (terrainMode + 1) % 3;
+			break;
+
+		case 'r':
+		case 'R':
+			textureMode = (textureMode + 1) % 4;
+			break;
+
+		case 'e':
+		case 'E':
+			switch (textureMode){
+			case 1:
+				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::MUD));
+				break;
+			case 2:
+				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::GRASS));
+				break;
+			case 3:
+				terrain.getGridSystem().getLastClickedGrid(camera)->setTexture(Texture(Texture::MOUNTAIN));
+				break;
+			default: //case 0
+				Grid* g = terrain.getGridSystem().getLastClickedGrid(camera);
+				g->setTexture(Texture(Texture::BLACK));
+				//Grid* g2 = terrain.getGridSystem().getLastClickedGrid(camera);
+				cout << "changed" << endl;
+				break;
+			}
 			break;
 
 // x is left
@@ -192,7 +219,6 @@ namespace
 			{
 			case GLUT_LEFT_BUTTON:
 				camera.MouseClick(Camera::LEFT, x, y);
-				
 				break;
 			case GLUT_MIDDLE_BUTTON:
 				camera.MouseClick(Camera::MIDDLE, x, y);
@@ -498,9 +524,18 @@ namespace
 		if (terrainMode == 0){
 			terrain.getGridSystem().drawMesh();
 		}
-		else {
-			terrain.getGridSystem().drawMeshSkeleton();
+		else if (terrainMode == 1){
+			terrain.getGridSystem().drawMeshSkeleton(false);
 		}
+		else {
+			terrain.getGridSystem().drawMeshSkeleton(true);
+		}
+		Grid* g = terrain.getGridSystem().getLastClickedGrid(camera);
+		/*if (g.getNoiseVal() > 0){
+			g.show();
+		}*/
+		terrain.getGridSystem().setSelectedGrid(g);
+		terrain.getGridSystem().showSelectedGrid();
 		
 		camera.drawRay();
 

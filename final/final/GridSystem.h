@@ -9,6 +9,7 @@
 #include <vector>
 #include "Grid.h"
 #include "Perlin.h"
+#include "PerspectiveCamera.h"
 
 using namespace std;
 
@@ -18,12 +19,18 @@ public:
 	GridSystem();
 	GridSystem(int w, int h, Perlin p);
 	void drawMesh();
-	void drawMeshSkeleton();
+	Grid* getLastClickedGrid(PerspectiveCamera pc);
+	void setSelectedGrid(Grid* g);
+	void showSelectedGrid();
+	void drawMeshSkeleton(bool drawNormal);
 private:
 	vector<vector<Grid>> grids; //grids[x][y]
 	Perlin p;
 	int w;
 	int h;
+	Grid* selectedGrid;
+	int selectedi;
+	int selectedj;
 };
 #endif // !GRIDSYSTEM_H
 
