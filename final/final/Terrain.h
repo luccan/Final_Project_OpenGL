@@ -8,7 +8,7 @@ class Terrain
 {
 public:
 	Terrain();
-	Terrain(PerlinNoise &p, int w, int h);
+	Terrain(PerlinNoise &p, int w, int h, float gridsize);
 	GridSystem* getGridSystem();
 	void SetGridSystem(GridSystem &gs);
 private:

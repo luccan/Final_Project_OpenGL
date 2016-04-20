@@ -1,75 +1,78 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <cassert>
-#include <vecmath.h>
+#include <extra.h>
+#include <GL\GL.h>
 
-#include "Ray.h"
-#include "Hit.h"
-///TODO:
-///Implement Shade function that uses ambient, diffuse, specular and texture
 class Material
 {
 public:
-
-	Material(const Vector3f& d_color, const Vector3f& s_color = Vector3f::ZERO, float s = 0) :
-		diffuseColor(d_color), specularColor(s_color), shininess(s)
-	{
+	enum TYPE { WATER, GRASS, MUD, MOUNTAIN, BLACK };
+	Material(){
 
 	}
+
+	Material(TYPE type_m)
+	{
+		GLfloat water[4] = { 0.0f, 0.8f, 0.2f, 0.6f };
+		GLfloat grass[4] = { 0.3f, 0.4f, 0.4f, 1.0f };
+		GLfloat mud[4] = { 0.4f, 0.2f, 0.1f, 1.0f };
+		GLfloat mountain[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		GLfloat black[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+		this->type = type_m;
+		switch (this->type)
+		{
+		case GRASS:
+			this->rgba_v = grass;
+			this->rgba = Vector4f(grass[0], grass[1], grass[2], grass[3]);
+			break;
+
+		case MOUNTAIN:
+			this->rgba_v = mountain;
+			this->rgba = Vector4f(mountain[0], mountain[1], mountain[2], mountain[3]);
+			break;
+
+		case MUD:
+			this->rgba_v = mud;
+			this->rgba = Vector4f(mud[0], mud[1], mud[2], mud[3]);
+			break;
+
+		case BLACK:
+			this->rgba_v = black;
+			this->rgba = Vector4f(black[0], black[1], black[2], black[3]);
+			break;
+		case WATER:
+			this->rgba_v = water;
+			this->rgba = Vector4f(water[0], water[1], water[2], water[3]);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void bindMat()
+	{
+		glEnable(GL_BLEND);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		//glColor3fv(rgba_v);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, this->rgba_v);
+	}
+
 
 	virtual ~Material()
 	{
-
 	}
 
-	virtual Vector3f getDiffuseColor() const
+	Material getMaterial()
 	{
-		return  diffuseColor;
+		//if (this->type == GRASS);
+		return Material();
 	}
-
-
-	Vector3f Shade(const Ray& ray, const Hit& hit,
-		const Vector3f& dirToLight, const Vector3f& lightColor)
-	{
-
-		Vector3f n = hit.getNormal().normalized();
-		Vector3f mydiffuseColor;
-		Vector3f myspecularColor;
-
-		//Diffuse Shading w/ clamping
-		float nDotl = Vector3f::dot(n, dirToLight);
-		if (nDotl < 0)
-		{
-			nDotl = 0;
-		}
-
-
-		mydiffuseColor = nDotl*diffuseColor*lightColor;
-
-
-		//Phong Shading w/ clamping
-		Vector3f v = ray.getDirection()*-1.0f;
-		Vector3f r = (dirToLight*-1.0f) + 2.0f*n*(nDotl);
-		r.normalized();
-
-		float vDotr = Vector3f::dot(v, r);
-		if (vDotr < 0)
-		{
-			vDotr = 0;
-		}
-
-		myspecularColor = specularColor*pow(vDotr, shininess)*lightColor;
-
-		return mydiffuseColor + myspecularColor;
-
-	}
-
-	
-protected:
-	Vector3f diffuseColor;
-	Vector3f specularColor;
-	float shininess;
+private:
+	TYPE type;
+	Vector4f rgba;
+	GLfloat* rgba_v;
 };
 
 

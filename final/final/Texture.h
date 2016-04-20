@@ -18,4 +18,5 @@ private:
 	Vector3f rgb;
 	TYPE type;
 };
+
 #endif // !GRID_H

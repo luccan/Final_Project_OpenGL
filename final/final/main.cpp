@@ -513,9 +513,11 @@ namespace
 	void displayTerrain(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+		glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
 		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_BLEND);
 
 		glLoadIdentity();                 // Reset the model-view matrix
 
@@ -566,8 +568,8 @@ namespace
 		// Light color (RGBA)
 		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
-		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
+		glLightfv(GL_LIGHT0+1, GL_DIFFUSE, Lt0diff);
+		glLightfv(GL_LIGHT0+1, GL_POSITION, Lt0pos);
 
 		camera.ApplyModelview();
 
@@ -709,8 +711,10 @@ int main(int argc, char* argv[])
 	// Set up the callback function for resizing windows
 	glutReshapeFunc(reshapeFunc);
 
+	float gridsize = 0.25f;
+
 	PerlinNoise perlin = PerlinNoise();
-	terrain = Terrain(perlin, 10, 10);
+	terrain = Terrain(perlin, 10, 10, gridsize);
 	// Call this whenever window needs redrawing
 	glutDisplayFunc(drawScene);
 //    glutDisplayFunc(displayCube);
