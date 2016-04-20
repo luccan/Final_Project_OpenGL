@@ -3,19 +3,22 @@
 #include <iostream>
 #include "extra.h"
 
-Grid::Grid()
+Grid::Grid() //dummy initialization
 {
+	this->valid = false;
 }
 
 Grid::Grid(float x, float y, float z)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
+	this->valid = true;
 }
 
 Grid::Grid(float x, float y, float z, Texture t)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
 	this->texture = t;
+	this->valid = true;
 }
 
 void Grid::assignNoise(float val)
@@ -46,12 +49,12 @@ void Grid::assignNoise(float val)
 
 }
 
-void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_left)
-{
-	this->neighbors[0] = &n_up;
-	this->neighbors[1] = &n_right;
-	this->neighbors[2] = &n_down;
-	this->neighbors[3] = &n_left;
+
+void Grid::setNeighboringGrid(Grid* n_up, Grid* n_right, Grid* n_down, Grid* n_left){
+	this->neighbors[0] = n_up;
+	this->neighbors[1] = n_right;
+	this->neighbors[2] = n_down;
+	this->neighbors[3] = n_left;
 	this->normal = Vector3f::cross(this->neighbors[0]->getXYZ(), this->neighbors[1]->getXYZ()) \
 		+ Vector3f::cross(this->neighbors[1]->getXYZ(), this->neighbors[2]->getXYZ()) \
 		+ Vector3f::cross(this->neighbors[2]->getXYZ(), this->neighbors[3]->getXYZ()) \
@@ -59,8 +62,7 @@ void Grid::setNeighboringGrid(Grid &n_up, Grid &n_right, Grid &n_down, Grid &n_l
 	this->normal.normalize();
 }
 
-void Grid::naturalizeGrid()
-{
+void Grid::naturalizeGrid(){ // USE POINTER!
 	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	if (r < 0.2)
 	{
@@ -98,9 +100,10 @@ Texture Grid::getTexture()
 }
 void Grid::setTexture(Texture t)
 {
-	texture = t;
+	if (this->valid){
+		this->texture = t;
+	}
 }
-
 Material Grid::getMaterial()
 {
 	return this->mat;
@@ -110,14 +113,14 @@ void Grid::setMaterial(Material m)
 	this->mat = m;
 	m.bindMat();
 }
-void Grid::show()
-{
-	glBegin(GL_QUADS);
+void Grid::show(){
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex(this->neighbors[0]->getXYZ());
-	glVertex(this->neighbors[1]->getXYZ());
-	glVertex(this->neighbors[2]->getXYZ());
-	glVertex(this->neighbors[3]->getXYZ());
-	cout << this->neighbors[0]->getXYZ().x() << " " << this->neighbors[0]->getXYZ().y() << " " << this->neighbors[0]->getXYZ().z() << " " << endl;
+	glBegin(GL_TRIANGLES);
+	//elevate z just a bit to ensure red is visible
+	glVertex(this->getXYZ()+Vector3f(0,0,0.001)); glVertex(this->neighbors[0]->getXYZ()); glVertex(this->neighbors[1]->getXYZ());
+	glVertex(this->getXYZ()+Vector3f(0,0,0.001)); glVertex(this->neighbors[1]->getXYZ()); glVertex(this->neighbors[2]->getXYZ());
+	glVertex(this->getXYZ()+Vector3f(0,0,0.001)); glVertex(this->neighbors[2]->getXYZ()); glVertex(this->neighbors[3]->getXYZ());
+	glVertex(this->getXYZ()+Vector3f(0,0,0.001)); glVertex(this->neighbors[3]->getXYZ()); glVertex(this->neighbors[0]->getXYZ());
+	//cout << this->neighbors[0]->getXYZ().x() << " " << this->neighbors[0]->getXYZ().y() << " " << this->neighbors[0]->getXYZ().z() << " " << endl;
 	glEnd();
 }

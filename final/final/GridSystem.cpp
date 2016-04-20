@@ -15,8 +15,7 @@ GridSystem::GridSystem()
 
 GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 {
-	this->selectedGrid = &Grid();
-	this->selectedi = 0; this->selectedj = 0;
+	this->selectedi = -1; this->selectedj = -1;
 	this->w = w;
 	this->h = h;
 	this->offset = gridsize;
@@ -28,13 +27,13 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 	//initialize grids
 	for (float i = 0.0f; i < w + (offset/2); i += offset) //float correction that's why we add (offset/2)
 	{
-		vector<Grid> gridRow;
+		vector<Grid*> gridRow;
 		for (float j = 0.0; j < h + (offset/2); j += offset)
 		{
-			Grid g = Grid(i, 0.0f, j);
+			Grid* g = new Grid(i, 0.0f, j);
 			float val = p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3;
 			cout << val << endl;
-			g.assignNoise(p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
+			g->assignNoise(p.Noise(i, 0.0f, j, persistance, amplitude, octave) * 3);
 			/*if (i == 0.0f || (i + (2 * offset))>w || j == offset || (j + (2 * offset))>h)
 			{
 				g.assignNoise(p.octave_noise(i, 0.0f, j, persistance, amplitude, octave));
@@ -52,11 +51,11 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
-			Grid n_up = (i > 0) ? grids[i - 1][j] : grids[i][j];
-			Grid n_down = (i < grids.size()-1) ? grids[i + 1][j] : grids[i][j];
-			Grid n_right = (j < grids[0].size() - 1) ? grids[i][j + 1] : grids[i][j];
-			Grid n_left = (j > 0) ? grids[i][j - 1] : grids[i][j];
-			grids[i][j].setNeighboringGrid(n_up, n_right, n_down, n_left);
+			Grid* n_up = (i > 0) ? grids[i - 1][j] : grids[i][j];
+			Grid* n_down = (i < grids.size()-1) ? grids[i + 1][j] : grids[i][j];
+			Grid* n_right = (j < grids[0].size() - 1) ? grids[i][j + 1] : grids[i][j];
+			Grid* n_left = (j > 0) ? grids[i][j - 1] : grids[i][j];
+			grids[i][j]->setNeighboringGrid(n_up, n_right, n_down, n_left);
 		}
 	}
 
@@ -80,18 +79,19 @@ void GridSystem::drawMesh()
 		{
 			if (i > 0 && j > 0)
 			{
-				grids[i - 1][j - 1].getTexture().chooseTexture();
+				grids[i - 1][j - 1]->getTexture().chooseTexture();
 				//grids[i - 1][j - 1].getMaterial().bindMat();
-				glVertex(grids[i - 1][j - 1].getXYZ());
-				grids[i][j - 1].getTexture().chooseTexture();
+				glVertex(grids[i - 1][j - 1]->getXYZ());
+				grids[i][j - 1]->getTexture().chooseTexture();
 				//grids[i][j - 1].getMaterial().bindMat();
-				glVertex(grids[i][j - 1].getXYZ());
-				grids[i][j].getTexture().chooseTexture();
-				//grids[i][j].getMaterial().bindMat();
-				glVertex(grids[i][j].getXYZ());
-				grids[i - 1][j].getTexture().chooseTexture();
-				//grids[i - 1][j].getMaterial().bindMat();
-				glVertex(grids[i - 1][j].getXYZ());
+				glVertex(grids[i][j - 1]->getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				//grids[i][j]->getMaterial()->bindMat();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i - 1][j]->getTexture().chooseTexture();
+				//grids[i - 1][j]->getMaterial()->bindMat();
+				glVertex(grids[i - 1][j]->getXYZ());
+
 			}
 		}
 	}
@@ -148,29 +148,29 @@ void GridSystem::drawMeshSkeleton(bool drawNormal = false){
 			//draw normal
 			if (drawNormal){
 				glColor3f(1.0f, 0.0f, 0.0f);
-				glVertex(grids[i][j].getXYZ());
-				glVertex(grids[i][j].getXYZ() + (0.2* grids[i][j].getNormal()));
+				glVertex(grids[i][j]->getXYZ());
+				glVertex(grids[i][j]->getXYZ() + (0.2* grids[i][j]->getNormal()));
 			}
 			//draw mesh lines
 			if (i > 0){
-				grids[i][j].getTexture().chooseTexture();
-				glVertex(grids[i][j].getXYZ());
-				grids[i - 1][j].getTexture().chooseTexture();
-				glVertex(grids[i - 1][j].getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i - 1][j]->getTexture().chooseTexture();
+				glVertex(grids[i - 1][j]->getXYZ());
 			}
 			if (j > 0){
-				grids[i][j].getTexture().chooseTexture();
-				glVertex(grids[i][j].getXYZ());
-				grids[i][j - 1].getTexture().chooseTexture();
-				glVertex(grids[i][j - 1].getXYZ());
+				grids[i][j]->getTexture().chooseTexture();
+				glVertex(grids[i][j]->getXYZ());
+				grids[i][j - 1]->getTexture().chooseTexture();
+				glVertex(grids[i][j - 1]->getXYZ());
 			}
 		}
 	}
 	glEnd();
 }
 
-Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
-	Grid* ret = new Grid();
+void GridSystem::getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj){
+	int retij[2] = { -1, -1 };
 	float min_dist = FLT_MAX;
 
 	Vector3f ray = pc.getRay();
@@ -180,75 +180,56 @@ Grid* GridSystem::getLastClickedGrid(PerspectiveCamera pc){
 	{
 		for (int j = 0; j < grids[0].size(); j++)
 		{
-			Grid* g = &grids[i][j];
+			Grid* g = grids[i][j];
 			Vector3f pt = g->getXYZ();
 			Vector3f newray = pt - pc.getCameraLocation(); //ray from camera to pt
 			float dist = sqrt(pow(newray.x(), 2) + pow(newray.y(), 2) + pow(newray.z(), 2)); //dist from camera to pt
 			Vector3f extNewray = newray.normalized() * d;
 			Vector3f extPt = pc.getCameraLocation() + extNewray; //extended point in objective 3d space (0, 0, 592, 592)
 			
-			glBegin(GL_LINES);
-			glColor3f(0.0f, 1.0f, 0.0f);
-			float threshold = (d/180)*offset;
+			float threshold = (d/30)*offset; //30 is a constant used when offset is 0.9
 			if (abs(extPt.x() - p.x()) < threshold \
 				&& abs(extPt.y() - p.y()) < threshold \
-				&& abs(extPt.z() - p.z()) < threshold){ //DUMMY LOL
+				&& abs(extPt.z() - p.z()) < threshold){ //NO LONGER DUMMY LOL //IT WORKS
 				if (min_dist > dist){
 					min_dist = dist;
-					ret = g;
-					Vector3f point = pc.getCameraLocation() + newray / 3.0f;
-					glVertex(point);
-					glVertex(pt);
-					cout << point.x() << " " << point.y() << " " << point.z() << " " << endl;
-					cout << pt.x() << " " << pt.y() << " " << pt.z() << " " << endl;
+					retij[0] = i; retij[1] = j;
 				}
 			}
-			glVertex(Vector3f(0,0,0));
-			glEnd();
+
 		}
 	}
 
-	return ret;
+	reti = retij[0];
+	retj = retij[1];
 }
-void GridSystem::setSelectedGrid(Grid* g){
-	selectedGrid = g;
-	for (int i = 0; i < grids.size(); i++)
-	{
-		for (int j = 0; j < grids[0].size(); j++)
-		{
-			if (grids[i][j].getXYZ().x() == selectedGrid->getXYZ().x() \
-				&& grids[i][j].getXYZ().y() == selectedGrid->getXYZ().y() \
-				&& grids[i][j].getXYZ().z() == selectedGrid->getXYZ().z()){
-				this->selectedi = i;
-				this->selectedj = j;
-				glBegin(GL_QUADS);
-				glColor3f(1.0f, 0.0f, 0.0f);
-				if (selectedi>0 && selectedj > 0){
-					glVertex(grids[selectedi][selectedj].getXYZ());
-					glVertex(grids[selectedi][selectedj - 1].getXYZ());
-					glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
-					glVertex(grids[selectedi - 1][selectedj].getXYZ());
-				}
-				glEnd();
-			}
-		}
-	}
+void GridSystem::setSelectedGrid(int i, int j){
+	selectedi = i;
+	selectedj = j;
 }
 void GridSystem::showSelectedGrid(){
-	glBegin(GL_QUADS);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	if (selectedi>0 && selectedj > 0){
-		glVertex(grids[selectedi][selectedj].getXYZ());
-		glVertex(grids[selectedi][selectedj-1].getXYZ());
-		glVertex(grids[selectedi-1][selectedj-1].getXYZ());
-		glVertex(grids[selectedi-1][selectedj].getXYZ());
+	if (selectedi >= 0 && selectedj >= 0){
+		grids[selectedi][selectedj]->show();
 	}
-	glEnd();
-	/*if (this->selectedGrid->getNoiseVal() > 0){
-		this->selectedGrid->show();
+	/*if (selectedi > 0 && selectedj > 0){
+		glBegin(GL_QUADS);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		if (selectedi>0 && selectedj > 0){
+			glVertex(grids[selectedi][selectedj].getXYZ());
+			glVertex(grids[selectedi][selectedj - 1].getXYZ());
+			glVertex(grids[selectedi - 1][selectedj - 1].getXYZ());
+			glVertex(grids[selectedi - 1][selectedj].getXYZ());
+		}
+		glEnd();
 	}*/
 }
-
+Grid* GridSystem::getSelectedGrid(){
+	if (selectedi < 0 && selectedj < 0){
+		Grid* dummy = &Grid();
+		return dummy;
+	}
+	return grids[selectedi][selectedj];
+}
 
 
 

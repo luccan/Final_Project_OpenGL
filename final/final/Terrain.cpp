@@ -12,9 +12,9 @@ Terrain::Terrain(PerlinNoise& p, int w, int h, float gridsize)
 	this->gs = GridSystem(w,h,p, gridsize);
 }
 
-GridSystem Terrain::getGridSystem()
+GridSystem* Terrain::getGridSystem()
 {
-	return gs;
+	return &gs;
 }
 void Terrain::SetGridSystem(GridSystem &gs)
 {

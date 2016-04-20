@@ -19,16 +19,16 @@ public:
 	GridSystem();
 	GridSystem(int w, int h, PerlinNoise p, float gridsize);
 	void drawMesh();
-	Grid* getLastClickedGrid(PerspectiveCamera pc);
-	void setSelectedGrid(Grid* g);
+	void getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj); //returns 2 int values
+	void setSelectedGrid(int i, int j);
 	void showSelectedGrid();
+	Grid* getSelectedGrid();
 	void drawMeshSkeleton(bool drawNormal);
 private:
-	vector<vector<Grid>> grids; //grids[x][y]
+	vector<vector<Grid*>> grids; //grids[x][y]
 	Perlin p;
 	int w;
 	int h;
-	Grid* selectedGrid;
 	int selectedi;
 	int selectedj;
 	float offset;
