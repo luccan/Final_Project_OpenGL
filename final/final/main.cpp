@@ -119,7 +119,7 @@ namespace
 			break;
 		}
 		
-		case 'c':
+		/*case 'c':
 			gCurveMode = (gCurveMode + 1) % 3;
 			break;
 		case 'm':
@@ -127,7 +127,7 @@ namespace
 			break;
 		case 'p':
 			gPointMode = (gPointMode + 1) % 2;
-			break;
+			break;*/
 
 		case 't':
 		case 'T':
@@ -173,6 +173,9 @@ namespace
 // z is backward
         case 'w':
         {
+			if (viewMode == 0){
+				break;
+			}
 //            cameraUp.print();
 //            cameraRight.print();
 //            up.print();
@@ -183,16 +186,25 @@ namespace
         }
         case 's':
         {
+			if (viewMode == 0){
+				break;
+			}
             camera.SetCenter(camera.GetCenter()-cameraFront*cameraSpeed);
             break;
         }
         case 'a':
             {
+				if (viewMode == 0){
+					break;
+				}
                 camera.SetCenter(camera.GetCenter() + Vector3f::cross(cameraFront, cameraUp).normalized() * cameraSpeed);
                 break;
             }
         case 'd':
             {
+				if (viewMode == 0){
+					break;
+				}
                 camera.SetCenter(camera.GetCenter() - Vector3f::cross(cameraFront, cameraUp).normalized() * cameraSpeed);
                 break;
             }
