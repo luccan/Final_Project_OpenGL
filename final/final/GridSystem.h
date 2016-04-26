@@ -25,7 +25,7 @@ public:
 	Grid* getSelectedGrid();
 	void drawBoundingBox(int boundingBoxHeight);
 	void drawMeshSkeleton(bool drawNormal);
-	Matrix4f GridSystem::RotationMatrixOnAxis(float angle, float u, float v, float w);
+	Matrix4f RotationMatrixOnAxis(float angle, float u, float v, float w);
 	void forceGroundedView(PerspectiveCamera &pc);
 	float getYLevel(float x, float y);
 private:
