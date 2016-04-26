@@ -106,7 +106,7 @@ namespace
 		case 'V':
 			if (viewMode == 0){
 				viewMode = 1;
-				camera.SetDistance(2);
+				camera.SetDistance(0.5);
 				camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
 				camera.SetRotation(Matrix4f::identity());
 			}
@@ -321,7 +321,12 @@ namespace
 		camera.ApplyModelview();
 
 		if (terrainMode == 0){
-			terrain.getGridSystem()->drawMesh();
+			if (viewMode == 1){
+				terrain.getGridSystem()->drawMesh(true);
+			}
+			else {
+				terrain.getGridSystem()->drawMesh(false);
+			}
 		}
 		else if (terrainMode == 1){
 			terrain.getGridSystem()->drawMeshSkeleton(false);
@@ -337,7 +342,7 @@ namespace
 		camera.drawRay();
 
 		if (viewMode == 1){ //roaming
-			terrain.getGridSystem()->forceGroundedView(camera, 0.25f);
+			terrain.getGridSystem()->forceGroundedView(camera);
 		}
 
 		// This draws the coordinate axes when you're rotating, to

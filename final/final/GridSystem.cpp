@@ -66,7 +66,7 @@ GridSystem::GridSystem(int w, int h, PerlinNoise p, float gridsize)
 	}*/
 }
 
-void GridSystem::drawMesh()
+void GridSystem::drawMesh(bool walkaround)
 {
 	glBegin(GL_QUADS);
 	GLfloat Lt1diff[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -96,28 +96,40 @@ void GridSystem::drawMesh()
 		}
 	}
 
-	const float boundingBoxHeight = 2.0f;
+	glEnd();
+
+	if (walkaround){
+		drawBoundingBox(8.0);
+	}
+	else {
+		drawBoundingBox(2.0);
+	}
+}
+
+void GridSystem::drawBoundingBox(int boundingBoxHeight){
+	glBegin(GL_QUADS);
+	//const float boundingBoxHeight = 2.0f;
 	const float waterLevel = 1.0f;
-	//draw bounding box
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glVertex(Vector3f(0,0,0));
+	//draw bounding box (sky)
+	glColor3f(0.8f, 0.8f, 1.0f);
+	glVertex(Vector3f(0, 0, 0));
 	glVertex(Vector3f(0, boundingBoxHeight, 0));
 	glVertex(Vector3f(w, boundingBoxHeight, 0));
 	glVertex(Vector3f(w, 0, 0));
 
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.8f, 0.8f, 1.0f);
 	glVertex(Vector3f(0, 0, h));
 	glVertex(Vector3f(0, boundingBoxHeight, h));
 	glVertex(Vector3f(w, boundingBoxHeight, h));
 	glVertex(Vector3f(w, 0, h));
 
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.8f, 0.8f, 1.0f);
 	glVertex(Vector3f(w, 0, 0));
 	glVertex(Vector3f(w, boundingBoxHeight, 0));
 	glVertex(Vector3f(w, boundingBoxHeight, h));
 	glVertex(Vector3f(w, 0, h));
 
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.8f, 0.8f, 1.0f);
 	glVertex(Vector3f(0, 0, 0));
 	glVertex(Vector3f(0, boundingBoxHeight, 0));
 	glVertex(Vector3f(0, boundingBoxHeight, h));
@@ -223,27 +235,73 @@ Grid* GridSystem::getSelectedGrid(){
 	return grids[selectedi][selectedj];
 }
 
+Matrix4f GridSystem::RotationMatrixOnAxis(float angle, float u, float v, float w)
+{
+	float rotationMatrix[4][4];
+	float L = (u*u + v * v + w * w);
+	angle = angle * M_PI / 180.0; //converting to radian value
+	float u2 = u * u;
+	float v2 = v * v;
+	float w2 = w * w;
 
-void GridSystem::forceGroundedView(PerspectiveCamera &pc, float lookAtDistance) {
-	Vector3f p = pc.getCameraLocation();
-	Vector3f vec = pc.GetCenter() - p;
-	Vector3f lookAt = p + ((offset/2) * vec.normalized()); //from camera to lookAt direction
+	rotationMatrix[0][0] = (u2 + (v2 + w2) * cos(angle)) / L;
+	rotationMatrix[0][1] = (u * v * (1 - cos(angle)) - w * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[0][2] = (u * w * (1 - cos(angle)) + v * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[0][3] = 0.0;
 
-	Vector3f p_ground = Vector3f(p.x(), getYLevel(p.x(), p.z()), p.z());
-	Vector3f lookAt_ground = Vector3f(lookAt.x(), getYLevel(lookAt.x(), lookAt.z()), lookAt.z());
+	rotationMatrix[1][0] = (u * v * (1 - cos(angle)) + w * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[1][1] = (v2 + (u2 + w2) * cos(angle)) / L;
+	rotationMatrix[1][2] = (v * w * (1 - cos(angle)) - u * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[1][3] = 0.0;
+
+	rotationMatrix[2][0] = (u * w * (1 - cos(angle)) - v * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[2][1] = (v * w * (1 - cos(angle)) + u * sqrt(L) * sin(angle)) / L;
+	rotationMatrix[2][2] = (w2 + (u2 + v2) * cos(angle)) / L;
+	rotationMatrix[2][3] = 0.0;
+
+	rotationMatrix[3][0] = 0.0;
+	rotationMatrix[3][1] = 0.0;
+	rotationMatrix[3][2] = 0.0;
+	rotationMatrix[3][3] = 1.0;
+
+	return Matrix4f(rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2], rotationMatrix[0][3], 
+		rotationMatrix[1][0], rotationMatrix[1][1], rotationMatrix[1][2], rotationMatrix[1][3], 
+		rotationMatrix[2][0], rotationMatrix[2][1], rotationMatrix[2][2], rotationMatrix[2][3], 
+		rotationMatrix[3][0], rotationMatrix[3][1], rotationMatrix[3][2], rotationMatrix[3][3]);
+}
+
+void GridSystem::forceGroundedView(PerspectiveCamera &pc) {
+	float lookAt_distance = offset/2;
+	float old_distance = pc.GetDistance(); //need?
+
+	Vector3f _p = pc.getCameraLocation(); Vector3f p = _p - Vector3f(0, _p.y(), 0); //xz only
+	Vector3f _vec = pc.GetCenter() - p; Vector3f vec = _vec - Vector3f(0, _vec.y(), 0);
+	Vector3f lookAt = p + ((offset*2) * vec.normalized()); //from camera to lookAt direction (xz only)
+
+	Vector3f p_ground = Vector3f(p.x(), getYLevel(p.x(), p.z()) + 0.5f, p.z());
+	Vector3f lookAt_ground = Vector3f(lookAt.x(), getYLevel(lookAt.x(), lookAt.z()) + 0.5f, lookAt.z());
+	Vector3f nvec = (lookAt_ground - p_ground); //new camera location to new camera center
+	Vector3f lookAt_final = p_ground + (lookAt_distance * nvec.normalized());
 
 	//force distance to be at ground
-	if (pc.GetCenter().y() < lookAt_ground.y()){
-		pc.SetCenter(lookAt_ground); //apply new camera center
+	pc.SetCenter(lookAt_final); //apply new camera center
+	//pc.SetCenter(lookAt_ground); //apply new camera center
+	/*if (pc.GetCenter().y() < lookAt_ground.y() - 0.2){
+		pc.SetCenter(lookAt_ground - Vector3f(0, 0.2, 0)); //apply new camera center
 	}
-	else if (pc.GetCenter().y() > lookAt_ground.y() + 0.7) {
-		pc.SetCenter(lookAt_ground + Vector3f(0, 0.7, 0));
-	}
+	else if (pc.GetCenter().y() > lookAt_ground.y() + 0.2) {
+		pc.SetCenter(lookAt_ground + Vector3f(0, 0.2, 0));
+	}*/
 
-	Vector3f nvec = (lookAt_ground - p_ground); //new camera location to new camera center (alrd applied)
-	float lookAt_distance = sqrt(pow(nvec.x(), 2) + pow(nvec.y(), 2) + pow(nvec.z(), 2));
-	//float lookAt_distance = lookAtDistance;
+	//float lookAt_distance = sqrt(pow(nvec.x(), 2) + pow(nvec.y(), 2) + pow(nvec.z(), 2));
 	pc.SetDistance(lookAt_distance);
+
+	Vector3f rotaxis = Vector3f::cross(nvec, Vector3f::UP);
+	float angle_cur = atan((lookAt.y() - p_ground.y())/old_distance);
+	float angle_new = atan((lookAt_ground.y() - p_ground.y())/lookAt_distance);
+	float angle = angle_new - angle_cur;
+
+	pc.SetViewRotation(RotationMatrixOnAxis(angle, rotaxis.x(), rotaxis.y(), rotaxis.z()));
 
 	////set view to correct Z axis
 	//pc.SetCenter(lookAt_ground); //apply new camera center

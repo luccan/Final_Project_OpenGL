@@ -16,6 +16,7 @@ Camera::Camera()
 {
     mStartRot = Matrix4f::identity();
     mCurrentRot = Matrix4f::identity();
+	mViewRot = Matrix4f::identity();
 }
 
 void Camera::SetDimensions(int w, int h)
@@ -51,6 +52,11 @@ void Camera::SetRotation(const Matrix4f& rotation)
 void Camera::SetDistance(const float distance)
 {
     mStartDistance = mCurrentDistance = distance;
+}
+
+void Camera::SetViewRotation(const Matrix4f& viewRotation)
+{
+	mViewRot = viewRotation;
 }
 
 void Camera::MouseClick(Button button, int x, int y)
@@ -166,6 +172,7 @@ void Camera::ArcBallRotation(int x, int y, bool AllowZ = true)
         Vector3f axis( sy * ez - ey * sz, sz * ex - ez * sx, sx * ey - ex * sy );
 		if (!AllowZ){
 			axis = Vector3f(0 , sz * ex - ez * sx, 0);
+			mViewRot = Matrix4f::identity(); //reset view rot
 		}
         axis.normalize();
         
@@ -237,7 +244,7 @@ void Camera::ApplyModelview() const
               0.0, 1.0, 0.0);
 
     // rotate object
-    glMultMatrixf(mCurrentRot);
+    glMultMatrixf(mCurrentRot * mViewRot); //mViewRot is identity in normal Arcball rotation mode, used only in walkabout mode
 
     //translate object to center
     glTranslatef(-mCurrentCenter[0],-mCurrentCenter[1],-mCurrentCenter[2]);    

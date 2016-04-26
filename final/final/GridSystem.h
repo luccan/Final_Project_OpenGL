@@ -18,14 +18,15 @@ class GridSystem
 public:
 	GridSystem();
 	GridSystem(int w, int h, PerlinNoise p, float gridsize);
-	void drawMesh();
+	void drawMesh(bool walkaround);
 	void getLastClickedGrid(PerspectiveCamera pc, int &reti, int &retj); //returns 2 int values
 	void setSelectedGrid(int i, int j);
 	void showSelectedGrid();
 	Grid* getSelectedGrid();
+	void drawBoundingBox(int boundingBoxHeight);
 	void drawMeshSkeleton(bool drawNormal);
-
-	void forceGroundedView(PerspectiveCamera &pc, float lookAtDistance);
+	Matrix4f GridSystem::RotationMatrixOnAxis(float angle, float u, float v, float w);
+	void forceGroundedView(PerspectiveCamera &pc);
 	float getYLevel(float x, float y);
 private:
 	vector<vector<Grid*>> grids; //grids[x][y]

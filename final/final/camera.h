@@ -43,11 +43,15 @@ public:
     void SetRotation(const Matrix4f& rotation);
     void SetDistance(const float distance);
 
+	void SetViewRotation(const Matrix4f& viewRot);
+
     // Get for relevant vars
     Vector3f GetCenter() const { return mCurrentCenter; }
     Matrix4f GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
     
+	Matrix4f GetViewRotation() const { return mViewRot; }
+
 protected:
 
     // States 
@@ -58,6 +62,9 @@ protected:
     // For rotation
     Matrix4f mStartRot;
     Matrix4f mCurrentRot;
+
+	// For Walkabout mode
+	Matrix4f mViewRot;
 
     // For translation
     float   mPerspective[2];
