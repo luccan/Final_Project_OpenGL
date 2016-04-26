@@ -18,9 +18,6 @@
 #include <GL/freeglut.h>
 #endif
 
-//#include "parse.h"
-//#include "curve.h"
-//#include "surf.h"
 #include "extra.h"
 #include "PerspectiveCamera.h"
 #include "Terrain.h"
@@ -52,30 +49,14 @@ namespace
     GLfloat cameraSpeed;
 	// These are state variables for the UI
 	bool gMousePressed = false;
-	int  gCurveMode = 1;
-	int  gSurfaceMode = 1;
 	int  gPointMode = 1;
 
-	// This detemines how big to draw the normals
-	const float gLineLen = 0.1f;
 
 	// These are arrays for display lists for each drawing mode.  The
 	// convention is that drawmode 0 is "blank", and other drawmodes
 	// just call the appropriate display lists.
-	GLuint gCurveLists[3];
-	GLuint gSurfaceLists[3];
 	GLuint gAxisList;
-	GLuint gPointList;
-
-	// These STL Vectors store the control points, curves, and
-	// surfaces that will end up being drawn.  In addition, parallel
-	// STL vectors store the names for the curves and surfaces (as
-	// given by the files).
-	vector<vector<Vector3f> > gCtrlPoints;
-	//vector<Curve> gCurves;
-	vector<string> gCurveNames;
-	//vector<Surface> gSurfaces;
-	vector<string> gSurfaceNames;
+	//GLuint gPointList;
 
 	Terrain terrain;
 	char terrainMode = 0; //0 for mesh, 1 for wireframe
@@ -89,10 +70,8 @@ namespace
 	void mouseFunc(int button, int state, int x, int y);
 	void motionFunc(int x, int y);
 	void reshapeFunc(int w, int h);
-	void drawScene(void);
 	void initRendering();
-	//void loadObjects(int argc, char *argv[]);
-	//void makeDisplayLists();
+	void makeDisplayLists();
 
 	// This function is called whenever a "Normal" key press is
 	// received.
@@ -118,28 +97,19 @@ namespace
 			camera.SetCenter(Vector3f(5, 0, 5));
 			break;
 		}
-		
-		/*case 'c':
-			gCurveMode = (gCurveMode + 1) % 3;
-			break;
-		case 'm':
-			gSurfaceMode = (gSurfaceMode + 1) % 3;
-			break;
-		case 'p':
-			gPointMode = (gPointMode + 1) % 2;
-			break;*/
 
 		case 't':
 		case 'T':
 			terrainMode = (terrainMode + 1) % 3;
 			break;
-
 		case 'v':
 		case 'V':
-			viewMode = 1;
-			camera.SetDistance(2);
-			camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
-			camera.SetRotation(Matrix4f::identity());
+			if (viewMode == 0){
+				viewMode = 1;
+				camera.SetDistance(2);
+				camera.SetCenter(terrain.getGridSystem()->getSelectedGrid()->getXYZ());
+				camera.SetRotation(Matrix4f::identity());
+			}
 			break;
 
 		case 'r':
@@ -176,11 +146,6 @@ namespace
 			if (viewMode == 0){
 				break;
 			}
-//            cameraUp.print();
-//            cameraRight.print();
-//            up.print();
-
-            
             camera.SetCenter(camera.GetCenter()+cameraFront*cameraSpeed);
             break;
         }
@@ -285,48 +250,6 @@ namespace
 		camera.ApplyPerspective();
 	}
 
-	// This function is responsible for displaying the object.
-	void drawScene(void)
-	{
-		// Clear the rendering window
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		// Light color (RGBA)
-		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat Lt0pos[] = { 3.0, 3.0, 4.0, 1.0 };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
-		glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
-
-		camera.ApplyModelview();
-
-		// Call the relevant display lists.
-		if (gSurfaceMode)
-			glCallList(gSurfaceLists[gSurfaceMode]);
-
-		if (gCurveMode)
-			glCallList(gCurveLists[gCurveMode]);
-
-		// This draws the coordinate axes when you're rotating, to
-		// keep yourself oriented.
-		if (gMousePressed)
-		{
-			glPushMatrix();
-			glTranslated(camera.GetCenter()[0], camera.GetCenter()[1], camera.GetCenter()[2]);
-			glCallList(gAxisList);
-			glPopMatrix();
-		}
-
-		if (gPointMode)
-			glCallList(gPointList);
-
-		// Dump the image to the screen.
-		glutSwapBuffers();
-
-
-	}
 
 	// Initialize OpenGL's rendering modes
 	void initRendering()
@@ -338,17 +261,6 @@ namespace
 		// Setup polygon drawing
 		glShadeModel(GL_SMOOTH);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		// Antialiasing
-		// This looks like crap
-		/*
-		glEnable(GL_BLEND);
-		glEnable(GL_POINT_SMOOTH);
-		glEnable(GL_LINE_SMOOTH);
-		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		*/
 
 		// Clear to black
 		glClearColor(0, 0, 0, 1);
@@ -363,118 +275,9 @@ namespace
 		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
-	// Load in objects from standard input into the global variables: 
-	// gCtrlPoints, gCurves, gCurveNames, gSurfaces, gSurfaceNames.  If
-	// loading fails, this will exit the program.
-	//void loadObjects(int argc, char *argv[])
-	//{
-	//	if (argc < 2)
-	//	{
-	//		cerr << "usage: " << argv[0] << " SWPFILE [OBJPREFIX] " << endl;
-	//		exit(0);
-	//	}
-
-	//	ifstream in(argv[1]);
-	//	if (!in)
-	//	{
-	//		cerr << argv[1] << " not found\a" << endl;
-	//		exit(0);
-	//	}
-
-
-	//	cerr << endl << "*** loading and constructing curves and surfaces ***" << endl;
-
-	//	if (!parseFile(in, gCtrlPoints,
-	//		gCurves, gCurveNames,
-	//		gSurfaces, gSurfaceNames))
-	//	{
-	//		cerr << "\aerror in file format\a" << endl;
-	//		in.close();
-	//		exit(-1);
-	//	}
-
-	//	in.close();
-
-	//	// This does OBJ file output
-	//	if (argc > 2)
-	//	{
-	//		cerr << endl << "*** writing obj files ***" << endl;
-
-	//		string prefix(argv[2]);
-
-	//		for (unsigned i = 0; i<gSurfaceNames.size(); i++)
-	//		{
-	//			if (gSurfaceNames[i] != ".")
-	//			{
-	//				string filename =
-	//					prefix + string("_")
-	//					+ gSurfaceNames[i]
-	//					+ string(".obj");
-
-	//				ofstream out(filename.c_str());
-
-	//				if (!out)
-	//				{
-	//					cerr << "\acould not open file " << filename << ", skipping" << endl;
-	//					out.close();
-	//					continue;
-	//				}
-	//				else
-	//				{
-	//					outputObjFile(out, gSurfaces[i]);
-	//					cerr << "wrote " << filename << endl;
-	//				}
-	//			}
-	//		}
-
-	//	}
-
-	//	cerr << endl << "*** done ***" << endl;
-
-
-	//}
-
 	void makeDisplayLists()
 	{
-		//gCurveLists[1] = glGenLists(1);
-		//gCurveLists[2] = glGenLists(1);
-		//gSurfaceLists[1] = glGenLists(1);
-		//gSurfaceLists[2] = glGenLists(1);
 		gAxisList = glGenLists(1);
-		//gPointList = glGenLists(1);
-
-		// Compile the display lists
-
-		/*glNewList(gCurveLists[1], GL_COMPILE);
-		{
-			for (unsigned i = 0; i<gCurves.size(); i++)
-				drawCurve(gCurves[i], 0.0);
-		}
-		glEndList();
-
-		glNewList(gCurveLists[2], GL_COMPILE);
-		{
-			for (unsigned i = 0; i<gCurves.size(); i++)
-				drawCurve(gCurves[i], gLineLen);
-		}
-		glEndList();
-
-		glNewList(gSurfaceLists[1], GL_COMPILE);
-		{
-			for (unsigned i = 0; i<gSurfaces.size(); i++)
-				drawSurface(gSurfaces[i], true);
-		}
-		glEndList();
-
-		glNewList(gSurfaceLists[2], GL_COMPILE);
-		{
-			for (unsigned i = 0; i<gSurfaces.size(); i++)
-			{
-				drawSurface(gSurfaces[i], false);
-				drawNormals(gSurfaces[i], gLineLen);
-			}
-		}
-		glEndList();*/
 
 		glNewList(gAxisList, GL_COMPILE);
 		{
@@ -502,35 +305,6 @@ namespace
 			glPopAttrib();
 		}
 		glEndList();
-
-		//glNewList(gPointList, GL_COMPILE);
-		//{
-		//	// Save current state of OpenGL
-		//	glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-		//	// Setup for point drawing
-		//	glDisable(GL_LIGHTING);
-		//	glColor4f(1, 1, 0.0, 1);
-		//	glPointSize(4);
-		//	glLineWidth(1);
-
-		//	for (unsigned i = 0; i<gCtrlPoints.size(); i++)
-		//	{
-		//		glBegin(GL_POINTS);
-		//		for (unsigned j = 0; j<gCtrlPoints[i].size(); j++)
-		//			glVertex(gCtrlPoints[i][j]);
-		//		glEnd();
-
-		//		glBegin(GL_LINE_STRIP);
-		//		for (unsigned j = 0; j<gCtrlPoints[i].size(); j++)
-		//			glVertex(gCtrlPoints[i][j]);
-		//		glEnd();
-		//	}
-
-		//	glPopAttrib();
-		//}
-		//glEndList();
-
 	}
 
 	void displayTerrain(){
@@ -579,138 +353,16 @@ namespace
 		glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 	}
 
-	void displayCube() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
-		glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
-
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-		glEnable(GL_COLOR_MATERIAL);
-
-		glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-
-		// Render a color-cube consisting of 6 quads with different colors
-		glLoadIdentity();                 // Reset the model-view matrix
-		glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
-
-		// Light color (RGBA)
-		GLfloat Lt0diff[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat Lt0pos[] = { 3.0, 3.0, 5.0, 1.0 };
-		glLightfv(GL_LIGHT0+1, GL_DIFFUSE, Lt0diff);
-		glLightfv(GL_LIGHT0+1, GL_POSITION, Lt0pos);
-
-		camera.ApplyModelview();
-
-		glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-		// Top face (y = 1.0f)
-		// Define vertices in counter-clockwise (CCW) order with normal pointing out
-		glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(1.0f, 1.0f, -1.0f);
-		glVertex3f(-1.0f, 1.0f, -1.0f);
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f(1.0f, 1.0f, 1.0f);
-
-		// Bottom face (y = -1.0f)
-		glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-		glVertex3f(1.0f, -1.0f, 1.0f);
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f(1.0f, -1.0f, -1.0f);
-
-		// Front face  (z = 1.0f)
-		glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-		glVertex3f(1.0f, -1.0f, 1.0f);
-
-		// Back face (z = -1.0f)
-		glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
-		glVertex3f(1.0f, -1.0f, -1.0f);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f(-1.0f, 1.0f, -1.0f);
-		glVertex3f(1.0f, 1.0f, -1.0f);
-
-		// Left face (x = -1.0f)
-		glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f, 1.0f, -1.0f);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-
-		// Right face (x = 1.0f)
-		glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
-		glVertex3f(1.0f, 1.0f, -1.0f);
-		glVertex3f(1.0f, 1.0f, 1.0f);
-		glVertex3f(1.0f, -1.0f, 1.0f);
-		glVertex3f(1.0f, -1.0f, -1.0f);
-		glEnd();  // End of drawing color-cube
-
-		// Render a pyramid consists of 4 triangles
-		//glLoadIdentity();                  // Reset the model-view matrix
-		glTranslatef(-1.5f, 0.0f, -6.0f);  // Move left and into the screen
-
-
-		glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
-		// Front
-		glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-		glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(1.0f, -1.0f, 1.0f);
-
-		// Right
-		glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(1.0f, -1.0f, 1.0f);
-		glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(1.0f, -1.0f, -1.0f);
-
-		// Back
-		glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(1.0f, -1.0f, -1.0f);
-		glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-
-		// Left
-		glColor3f(1.0f, 0.0f, 0.0f);       // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		glColor3f(0.0f, 0.0f, 1.0f);       // Blue
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glColor3f(0.0f, 1.0f, 0.0f);       // Green
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-		glEnd();   // Done drawing the pyramid
-
-		// This draws the coordinate axes when you're rotating, to
-		// keep yourself oriented.
-		if (gMousePressed)
-		{
-			glPushMatrix();
-			glTranslated(camera.GetCenter()[0], camera.GetCenter()[1], camera.GetCenter()[2]);
-			glCallList(gAxisList);
-			glPopMatrix();
-		}
-
-		glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
-	}
-
 }
 // Main routine.
 // Set up OpenGL, define the callbacks and start the main loop
 int main(int argc, char* argv[])
 {
-	// Load in from standard input
-	//loadObjects(argc, argv);
-
 	/* initialize random seed: */
 	srand(time(NULL));
 
 	glutInit(&argc, argv);
 
-	// We're going to animate it, so double buffer 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
 	// Initial parameters for window position and size
@@ -724,8 +376,7 @@ int main(int argc, char* argv[])
 	camera.SetDistance(10);
 	camera.SetCenter(Vector3f(5, 0, 5));
 
-
-	glutCreateWindow("Graphics and Viz Final");
+	glutCreateWindow("Graphics and Visualization Final");
 
 	// Initialize OpenGL parameters.
 	initRendering();
@@ -745,13 +396,8 @@ int main(int argc, char* argv[])
 
 	PerlinNoise perlin = PerlinNoise();
 	terrain = Terrain(perlin, 10, 10, gridsize);
-	// Call this whenever window needs redrawing
-	glutDisplayFunc(drawScene);
-//    glutDisplayFunc(displayCube);
-	glutDisplayFunc(displayTerrain);
 
-	// Trigger timerFunc every 20 msec
-	//  glutTimerFunc(20, timerFunc, 0);
+	glutDisplayFunc(displayTerrain);
 
 	makeDisplayLists();
 
