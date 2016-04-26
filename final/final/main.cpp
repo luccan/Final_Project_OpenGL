@@ -329,17 +329,17 @@ namespace
 			}
 		}
 		else if (terrainMode == 1){
+			camera.drawRay();
 			terrain.getGridSystem()->drawMeshSkeleton(false);
 		}
 		else {
+			camera.drawRay();
 			terrain.getGridSystem()->drawMeshSkeleton(true);
 		}
 		int ij[2];
 		terrain.getGridSystem()->getLastClickedGrid(camera, ij[0], ij[1]); //populate ij
 		terrain.getGridSystem()->setSelectedGrid(ij[0], ij[1]);
 		terrain.getGridSystem()->showSelectedGrid();
-		
-		camera.drawRay();
 
 		if (viewMode == 1){ //roaming
 			terrain.getGridSystem()->forceGroundedView(camera);
@@ -347,13 +347,14 @@ namespace
 
 		// This draws the coordinate axes when you're rotating, to
 		// keep yourself oriented.
-		if (gMousePressed)
+		// Use only to debug
+		/*if (gMousePressed)
 		{
 			glPushMatrix();
 			glTranslated(camera.GetCenter()[0], camera.GetCenter()[1], camera.GetCenter()[2]);
 			glCallList(gAxisList);
 			glPopMatrix();
-		}
+		}*/
 
 		glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 	}
