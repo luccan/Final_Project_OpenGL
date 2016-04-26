@@ -30,7 +30,7 @@ public:
 	float getYLevel(float x, float y);
 private:
 	vector<vector<Grid*>> grids; //grids[x][y]
-	Perlin p;
+	PerlinNoise p;
 	int w;
 	int h;
 	int selectedi;

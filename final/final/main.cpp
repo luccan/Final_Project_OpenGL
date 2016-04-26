@@ -209,10 +209,14 @@ namespace
 				camera.MouseClick(Camera::LEFT, x, y);
 				break;
 			case GLUT_MIDDLE_BUTTON:
-				camera.MouseClick(Camera::MIDDLE, x, y);
+				if (viewMode == 0){
+					camera.MouseClick(Camera::MIDDLE, x, y);
+				}
 				break;
 			case GLUT_RIGHT_BUTTON:
-				camera.MouseClick(Camera::RIGHT, x, y);
+				if (viewMode == 0){
+					camera.MouseClick(Camera::RIGHT, x, y);
+				}
 			default:
 				break;
 			}
