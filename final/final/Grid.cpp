@@ -14,7 +14,7 @@ Grid::Grid(float x, float y, float z)
 	this->valid = true;
 }
 
-Grid::Grid(float x, float y, float z, Texture t)
+Grid::Grid(float x, float y, float z, VertexColor t)
 {
 	this->xyz = Vector3f(x, 0.0f, z);
 	this->texture = t;
@@ -27,27 +27,27 @@ void Grid::assignNoise(float val)
 	this->xyz.y() = val;
 	if (val > 2.0f)
 	{
-		this->texture = Texture(Texture::MOUNTAIN);
+		this->texture = VertexColor(VertexColor::MOUNTAIN);
 		this->mat = Material(Material::MOUNTAIN);
 	}
 	else if (val > 1.8f)
 	{
-		this->texture = Texture(Texture::MUD);
+		this->texture = VertexColor(VertexColor::MUD);
 		this->mat = Material(Material::MUD);
 	}
 	else if (val >= 0.5f && val <= 1.5f)
 	{
 		//float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-			/*this->texture = Texture(Texture::MUD);
+			/*this->texture = VertexColor(VertexColor::MUD);
 			this->mat = Material(Material::MUD);*/
 
 
-		this->texture = Texture(Texture::GRASS);
+		this->texture = VertexColor(VertexColor::GRASS);
 		this->mat = Material(Material::GRASS);
 		float h = 10.0f;
 	}
 	else {
-		this->texture = Texture(Texture::BLACK);
+		this->texture = VertexColor(VertexColor::BLACK);
 		this->mat = Material(Material::BLACK);
 	}
 
@@ -70,19 +70,19 @@ void Grid::naturalizeGrid(){ // USE POINTER!
 	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	if (r < 0.2)
 	{
-		this->texture = Texture(this->neighbors[0]->getTexture().getTexture());
+		this->texture = VertexColor(this->neighbors[0]->getTexture().getTexture());
 	}
 	else if (r < 0.4)
 	{
-		this->texture = Texture(this->neighbors[1]->getTexture().getTexture());
+		this->texture = VertexColor(this->neighbors[1]->getTexture().getTexture());
 	}
 	else if (r < 0.6)
 	{
-		this->texture = Texture(this->neighbors[2]->getTexture().getTexture());
+		this->texture = VertexColor(this->neighbors[2]->getTexture().getTexture());
 	}
 	else if (r < 0.8)
 	{
-		this->texture = Texture(this->neighbors[3]->getTexture().getTexture());
+		this->texture = VertexColor(this->neighbors[3]->getTexture().getTexture());
 	}
 }
 
@@ -98,11 +98,11 @@ Vector3f Grid::getNormal()
 {
 	return this->normal;
 }
-Texture Grid::getTexture()
+VertexColor Grid::getTexture()
 {
 	return texture;
 }
-void Grid::setTexture(Texture t)
+void Grid::setTexture(VertexColor t)
 {
 	if (this->valid){
 		this->texture = t;

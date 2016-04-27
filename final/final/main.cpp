@@ -121,17 +121,17 @@ namespace
 		case 'E':
 			switch (textureMode){
 			case 1:
-				terrain.getGridSystem()->getSelectedGrid()->setTexture(Texture(Texture::MUD));
+				terrain.getGridSystem()->getSelectedGrid()->setTexture(VertexColor(VertexColor::MUD));
 				break;
 			case 2:
-				terrain.getGridSystem()->getSelectedGrid()->setTexture(Texture(Texture::GRASS));
+				terrain.getGridSystem()->getSelectedGrid()->setTexture(VertexColor(VertexColor::GRASS));
 				break;
 			case 3:
-				terrain.getGridSystem()->getSelectedGrid()->setTexture(Texture(Texture::MOUNTAIN));
+				terrain.getGridSystem()->getSelectedGrid()->setTexture(VertexColor(VertexColor::MOUNTAIN));
 				break;
 			default: //case 0
 				Grid* g = terrain.getGridSystem()->getSelectedGrid();
-				g->setTexture(Texture(Texture::BLACK));
+				g->setTexture(VertexColor(VertexColor::BLACK));
 				//Grid* g2 = terrain.getGridSystem().getSelectedGrid();
 				cout << "changed" << endl;
 				break;
