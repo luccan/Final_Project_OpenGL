@@ -109,7 +109,7 @@ void GridSystem::drawMesh(bool walkaround)
 void GridSystem::drawBoundingBox(int boundingBoxHeight){
 	glBegin(GL_QUADS);
 	//const float boundingBoxHeight = 2.0f;
-	const float waterLevel = 1.0f;
+	const float waterLevel = 1.1f;
 	//draw bounding box (sky)
 	glColor3f(0.8f, 0.8f, 1.0f);
 	glVertex(Vector3f(0, 0, 0));
